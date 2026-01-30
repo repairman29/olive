@@ -6,7 +6,7 @@ test.describe('Login', () => {
     await expect(page.getByRole('heading', { name: /welcome back|join the kitchen/i })).toBeVisible()
     await expect(page.getByPlaceholder(/you@example|email/i)).toBeVisible()
     await expect(page.getByPlaceholder(/••••/)).toBeVisible()
-    await expect(page.getByRole('button', { name: /sign in|create account/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Sign In', exact: true })).toBeVisible()
   })
 
   test('Continue with Kroger link adds then=connect', async ({ page }) => {
@@ -23,7 +23,7 @@ test.describe('Login', () => {
 
   test('toggle sign in / create account', async ({ page }) => {
     await page.goto('/login')
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Sign In', exact: true })).toBeVisible()
     await page.getByRole('button', { name: /new here.*create an account/i }).click()
     await expect(page.getByRole('button', { name: /create account/i })).toBeVisible()
   })
@@ -32,7 +32,7 @@ test.describe('Login', () => {
     await page.goto('/login')
     await page.getByPlaceholder(/you@example|email/i).fill('test@example.com')
     await page.getByPlaceholder(/••••/).fill('wrongpassword123')
-    await page.getByRole('button', { name: /sign in/i }).click()
+    await page.getByRole('button', { name: 'Sign In', exact: true }).click()
     await expect(page).toHaveURL(/\/login/, { timeout: 15000 })
   })
 })
