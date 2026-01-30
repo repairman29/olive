@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, Suspense } from 'react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-export default function Login() {
+function LoginContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
@@ -158,5 +158,19 @@ export default function Login() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-[#fdfcf9] flex items-center justify-center">
+        <div className="w-12 h-12 bg-[#9caf88] rounded-full olive-pulse flex items-center justify-center">
+          <span className="text-white text-xl">🫒</span>
+        </div>
+      </main>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
