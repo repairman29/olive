@@ -4,10 +4,10 @@ test.describe('Home / Landing', () => {
   test('has Olive branding and main CTAs', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByText('Olive').first()).toBeVisible()
-    await expect(page.getByRole('heading', { name: /taking the.*chore.*out of the grocery store/i })).toBeVisible()
-    await expect(page.getByRole('link', { name: /join the beta/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /your kitchen companion/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: /join the beta/i })).toBeVisible()
     await expect(page.getByRole('link', { name: /continue with kroger/i })).toBeVisible()
-    await expect(page.getByRole('link', { name: /view kroger cart/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /view cart/i })).toBeVisible()
   })
 
   test('Sign In nav goes to login', async ({ page }) => {
@@ -18,7 +18,7 @@ test.describe('Home / Landing', () => {
 
   test('Join the Beta goes to login', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('link', { name: /join the beta/i }).click()
+    await page.getByRole('button', { name: /join the beta/i }).click()
     await expect(page).toHaveURL(/\/login/)
   })
 

@@ -1,28 +1,29 @@
 'use client'
 
 import Link from 'next/link'
+import { BentoTile, SageAdviceButton } from '@/components/ui'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(70%_60%_at_50%_0%,_#f1f5ec_0%,_#fdfcf9_60%)]">
+    <main className="min-h-screen bg-[radial-gradient(70%_60%_at_50%_0%,_#f3f7ef_0%,_#fffdf0_60%)]">
       {/* Hero Section */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         {/* Nav */}
         <nav className="flex justify-between items-center mb-16">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#9caf88] rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-[#556b2f] rounded-full flex items-center justify-center">
               <span className="text-white text-sm">🫒</span>
             </div>
-            <span className="text-xl font-medium text-[#3a4529]">Olive</span>
+            <span className="text-xl font-medium text-[#2f4f4f]">Olive</span>
           </div>
           <div className="flex items-center gap-4 text-sm">
             <span className="hidden sm:inline-flex items-center gap-2 text-[#87a05a]">
-              <span className="w-2 h-2 bg-[#9caf88] rounded-full"></span>
+              <span className="w-2 h-2 bg-[#8fbc8f] rounded-full"></span>
               Friends & family beta
             </span>
             <Link
               href="/login"
-              className="text-[#6b8245] hover:text-[#536538] transition font-medium"
+              className="text-[#556b2f] hover:text-[#3a4529] transition font-medium"
             >
               Sign In
             </Link>
@@ -33,24 +34,23 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-10 items-center mb-20">
           <div>
             <div className="inline-flex items-center gap-2 bg-white border border-[#eef2e6] px-3 py-1.5 rounded-full text-[#6b8245] text-xs mb-6 shadow-sm">
-              <span className="w-2 h-2 bg-[#9caf88] rounded-full"></span>
+              <span className="w-2 h-2 bg-[#8fbc8f] rounded-full"></span>
               Private beta • Invite-only
             </div>
-            <h1 className="text-4xl md:text-5xl font-semibold text-[#2d3a1f] mb-6 leading-tight">
-              Taking the &lsquo;chore&rsquo; out of the grocery store
+            <h1 className="text-4xl md:text-5xl font-semibold text-[#2f4f4f] mb-6 leading-tight">
+              Your Kitchen Companion
             </h1>
             <p className="text-lg text-[#536538] mb-8 leading-relaxed">
-              Tell Olive what you need throughout the week. She&apos;ll find your favorites,
-              clip the coupons, and have your Kroger cart ready when you are.
+              Turn messy lists and recipes into a filled Kroger cart in one tap. Olive finds the right brands,
+              clips the deals, and keeps you in control at checkout.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 bg-[#9caf88] text-white text-lg px-8 py-4 rounded-full hover:bg-[#87a05a] transition shadow-sm"
+              <SageAdviceButton
+                className="text-lg px-8 py-4 rounded-full shadow-sm"
+                onClick={() => (window.location.href = '/login')}
               >
-                <span>Join the Beta</span>
-                <span>→</span>
-              </Link>
+                Join the Beta →
+              </SageAdviceButton>
               <Link
                 href="/login?then=connect"
                 className="inline-flex items-center gap-2 border border-[#dce5cc] text-[#536538] text-lg px-7 py-4 rounded-full hover:bg-[#f8faf5] transition"
@@ -59,27 +59,27 @@ export default function Home() {
                 <span>Continue with Kroger</span>
               </Link>
               <a
-                href="https://www.kroger.com/shopping/cart"
+                href={`https://${process.env.NEXT_PUBLIC_KROGER_CART_DOMAIN || 'www.kroger.com'}/shopping/cart`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border border-[#dce5cc] text-[#536538] text-lg px-7 py-4 rounded-full hover:bg-white transition"
               >
-                View Kroger Cart
+                View Cart
               </a>
             </div>
             <p className="text-xs text-[#87a05a] mt-4">
-              Olive never checks out for you. You stay in control of every order.
+              Home Screen Ready • Olive never checks out for you.
             </p>
           </div>
 
-          <div className="bg-white rounded-[32px] p-6 border border-[#eef2e6] shadow-sm">
+          <BentoTile className="rounded-[32px]">
             <div className="bg-[#f8faf5] rounded-3xl p-5">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 bg-[#9caf88] rounded-full flex items-center justify-center olive-pulse">
+                <div className="w-10 h-10 bg-[#556b2f] rounded-full flex items-center justify-center olive-pulse">
                   <span className="text-white">🫒</span>
                 </div>
                 <div>
-                  <p className="text-[#2d3a1f] font-medium">Olive</p>
+                  <p className="text-[#2f4f4f] font-medium">Olive</p>
                   <p className="text-[#87a05a] text-xs">Kitchen companion</p>
                 </div>
               </div>
@@ -109,59 +109,82 @@ export default function Home() {
                 Ready cart
               </div>
             </div>
-          </div>
+          </BentoTile>
         </div>
 
         {/* How it Works - Bento Style */}
         <div className="grid md:grid-cols-2 gap-4 mb-16">
           {/* Main Card */}
-          <div className="md:col-span-2 bg-white rounded-3xl p-8 border border-[#eef2e6] shadow-sm">
+          <BentoTile className="md:col-span-2">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-[#eef2e6] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
                 💬
               </div>
               <div>
-                <h3 className="text-xl font-medium text-[#2d3a1f] mb-2">Just tell her</h3>
+                <h3 className="text-xl font-medium text-[#2f4f4f] mb-2">Just tell her</h3>
                 <p className="text-[#536538]">
-                  &ldquo;Olive, we need milk&rdquo; — that&apos;s it. She finds your usual brand,
+                  Type &ldquo;Olive, we need milk&rdquo; — that&apos;s it. She finds your usual brand,
                   adds it to your cart, and keeps a running list as you go.
                 </p>
               </div>
             </div>
-          </div>
+          </BentoTile>
 
           {/* Secondary Cards */}
-          <div className="bg-white rounded-3xl p-6 border border-[#eef2e6] shadow-sm">
+          <BentoTile>
             <div className="text-3xl mb-3">🏷️</div>
-            <h3 className="text-lg font-medium text-[#2d3a1f] mb-1">Coupons Clipped</h3>
+            <h3 className="text-lg font-medium text-[#2f4f4f] mb-1">Coupons Clipped</h3>
             <p className="text-[#536538] text-sm">
               Olive finds digital deals on items you actually buy and applies them automatically.
             </p>
-          </div>
+          </BentoTile>
 
-          <div className="bg-white rounded-3xl p-6 border border-[#eef2e6] shadow-sm">
+          <BentoTile>
             <div className="text-3xl mb-3">⛽</div>
-            <h3 className="text-lg font-medium text-[#2d3a1f] mb-1">Fuel Points Tracked</h3>
+            <h3 className="text-lg font-medium text-[#2f4f4f] mb-1">Fuel Points Tracked</h3>
             <p className="text-[#536538] text-sm">
               She&apos;ll let you know when you&apos;re close to the next discount at the pump.
             </p>
-          </div>
+          </BentoTile>
 
-          <div className="bg-white rounded-3xl p-6 border border-[#eef2e6] shadow-sm">
+          <BentoTile>
             <div className="text-3xl mb-3">🔄</div>
-            <h3 className="text-lg font-medium text-[#2d3a1f] mb-1">Never Run Out</h3>
+            <h3 className="text-lg font-medium text-[#2f4f4f] mb-1">Never Run Out</h3>
             <p className="text-[#536538] text-sm">
               Olive remembers your rhythm. She&apos;ll nudge you before the milk carton goes empty.
             </p>
-          </div>
+          </BentoTile>
 
-          <div className="bg-white rounded-3xl p-6 border border-[#eef2e6] shadow-sm">
+          <BentoTile>
             <div className="text-3xl mb-3">🛒</div>
-            <h3 className="text-lg font-medium text-[#2d3a1f] mb-1">Ready for Checkout</h3>
+            <h3 className="text-lg font-medium text-[#2f4f4f] mb-1">Ready for Checkout</h3>
             <p className="text-[#536538] text-sm">
               When you&apos;re ready, review your cart and head to Kroger for pickup. Easy.
             </p>
-          </div>
+          </BentoTile>
+        </div>
+
+        {/* Aha Demo */}
+        <div className="grid md:grid-cols-2 gap-4 mb-16">
+          <BentoTile>
+            <h3 className="text-[#2f4f4f] font-medium mb-2">Before Olive</h3>
+            <p className="text-[#536538] text-sm mb-4">Copying a list item-by-item in the Kroger app.</p>
+            <div className="space-y-2 text-sm">
+              <div className="bg-[#f8faf5] rounded-xl px-3 py-2 border border-[#eef2e6]">Milk</div>
+              <div className="bg-[#f8faf5] rounded-xl px-3 py-2 border border-[#eef2e6]">Avocados</div>
+              <div className="bg-[#f8faf5] rounded-xl px-3 py-2 border border-[#eef2e6]">Sourdough</div>
+            </div>
+          </BentoTile>
+          <BentoTile>
+            <h3 className="text-[#2f4f4f] font-medium mb-2">With Olive</h3>
+            <p className="text-[#536538] text-sm mb-4">Paste once. Olive sorts, finds, and fills.</p>
+            <div className="bg-[#f8faf5] rounded-2xl px-4 py-3 border border-[#eef2e6] text-sm">
+              &ldquo;Milk, avocados, sourdough, trash bags&rdquo;
+            </div>
+            <div className="mt-3 text-xs text-[#87a05a]">
+              &ldquo;I found 4 items. Sound right?&rdquo;
+            </div>
+          </BentoTile>
         </div>
 
         {/* Steps */}
@@ -171,13 +194,13 @@ export default function Home() {
             { step: '2', title: 'Add as you go', text: 'Drop items in whenever you think of them.' },
             { step: '3', title: 'Checkout anytime', text: 'Review and place the order when it suits you.' },
           ].map((item) => (
-            <div key={item.step} className="bg-white rounded-3xl p-6 border border-[#eef2e6] shadow-sm">
+            <BentoTile key={item.step}>
               <div className="w-8 h-8 bg-[#eef2e6] rounded-full flex items-center justify-center text-sm font-medium text-[#536538] mb-3">
                 {item.step}
               </div>
-              <h3 className="text-[#2d3a1f] font-medium mb-2">{item.title}</h3>
+              <h3 className="text-[#2f4f4f] font-medium mb-2">{item.title}</h3>
               <p className="text-[#536538] text-sm">{item.text}</p>
-            </div>
+            </BentoTile>
           ))}
         </div>
 
