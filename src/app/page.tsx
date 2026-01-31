@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import { BentoTile, SageAdviceButton } from '@/components/ui'
+import { BentoTile, CommandInput, SageAdviceButton } from '@/components/ui'
 
 export default function Home() {
+  const [heroCommand, setHeroCommand] = useState('')
   return (
     <main className="min-h-screen bg-[radial-gradient(70%_60%_at_50%_0%,_#f3f7ef_0%,_#fffdf0_60%)]">
       {/* Hero Section */}
@@ -51,9 +53,15 @@ export default function Home() {
               >
                 Join the Beta →
               </SageAdviceButton>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-[#87a05a]">
+              <span className="inline-flex items-center gap-2 italic">
+                <span className="text-lg">↗</span>
+                Help us teach Olive your favorite brands.
+              </span>
               <Link
                 href="/login?then=connect"
-                className="inline-flex items-center gap-2 border border-[#dce5cc] text-[#536538] text-lg px-7 py-4 rounded-full hover:bg-[#f8faf5] transition"
+                className="inline-flex items-center gap-2 text-[#556b2f] hover:text-[#3a4529] transition"
               >
                 <span>🛒</span>
                 <span>Continue with Kroger</span>
@@ -62,13 +70,13 @@ export default function Home() {
                 href={`https://${process.env.NEXT_PUBLIC_KROGER_CART_DOMAIN || 'www.kroger.com'}/shopping/cart`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-[#dce5cc] text-[#536538] text-lg px-7 py-4 rounded-full hover:bg-white transition"
+                className="inline-flex items-center gap-2 text-[#556b2f] hover:text-[#3a4529] transition"
               >
                 View Cart
               </a>
             </div>
             <p className="text-xs text-[#87a05a] mt-4">
-              Home Screen Ready • Olive never checks out for you.
+              Add Olive to your home screen for one-tap access • Olive never checks out for you.
             </p>
           </div>
 
@@ -99,14 +107,17 @@ export default function Home() {
               <div className="bg-[#f8faf5] rounded-2xl py-3">
                 <div className="text-lg">🏷️</div>
                 Coupons
+                <div className="text-[11px] text-[#87a05a] mt-1">12 deals spotted today</div>
               </div>
               <div className="bg-[#f8faf5] rounded-2xl py-3">
                 <div className="text-lg">⛽</div>
                 Fuel points
+                <div className="text-[11px] text-[#87a05a] mt-1">+30¢ on deck</div>
               </div>
               <div className="bg-[#f8faf5] rounded-2xl py-3">
                 <div className="text-lg">🛒</div>
                 Ready cart
+                <div className="text-[11px] text-[#87a05a] mt-1">Drafted for review</div>
               </div>
             </div>
           </BentoTile>
@@ -202,6 +213,30 @@ export default function Home() {
               <p className="text-[#536538] text-sm">{item.text}</p>
             </BentoTile>
           ))}
+        </div>
+
+        {/* Try it */}
+        <div className="mb-16">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
+            <div>
+              <h3 className="text-xl font-medium text-[#2f4f4f] mb-2">Try the command flow</h3>
+              <p className="text-[#536538] text-sm">
+                Drop a list here and see how Olive thinks before you even sign in.
+              </p>
+            </div>
+            <Link
+              href="/login?then=connect"
+              className="inline-flex items-center gap-2 border border-[#dce5cc] text-[#536538] text-sm px-4 py-2 rounded-full hover:bg-[#f8faf5] transition w-fit"
+            >
+              Continue with Kroger
+            </Link>
+          </div>
+          <CommandInput
+            value={heroCommand}
+            onChange={setHeroCommand}
+            onSubmit={() => (window.location.href = '/login')}
+            helperText="We’ll save your list once you connect."
+          />
         </div>
 
         {/* FAQ */}
