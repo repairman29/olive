@@ -11,7 +11,7 @@
 1. **E2E green** — Run `npm run test:e2e:dashboard-authed` (or with `TEST_USER_*`) and fix any flaky/skipped recipe or Smart Paste tests.
 2. **Recipe → haul** — E2E already covers “add ingredients from recipe → haul has items”; keep it green and add more specific ingredient assertions if desired.
 3. **Onboarding** — First-run guide, Connect Kroger timing, First Haul celebration copy; align with §5 and §6.
-4. **Add-to-cart reliability** — If 503s or “couldn’t add” spike, use `olive-e2e/docs/ADD-TO-CART-503-REVIEW.md` and env-check; tune error messaging.
+4. **Add-to-cart reliability** — If 503s or “couldn’t add” spike, use [docs/ADD-TO-CART-503-REVIEW.md](ADD-TO-CART-503-REVIEW.md) and env-check; tune error messaging.
 5. **Bento & progress** — Fuel points / coupons tiles, typewriter progress; ship or hide until ready. (No separate “granny narrative” — the logic is in code.)
 
 ---
@@ -58,7 +58,7 @@ To maintain the brand vibe, use these named tokens for all UI elements.
 
 ## 4. Granny Logic (The Brain)
 
-*Implemented in `olive-e2e/src/app/api/kroger/add-to-cart/route.ts` — no separate narrative/copy.*
+*Implemented in `src/app/api/kroger/add-to-cart/route.ts` — no separate narrative/copy.*
 
 1.  **Unit Normalization:** `parseSize` + `normalizeToOz` (16 oz = 1 lb, etc.) for comparing product sizes when picking.
 2.  **Cost-to-Satisfy:** Sort by best per-unit price first; sale is a tiebreaker in Budget mode (Sale Trap).
@@ -112,7 +112,7 @@ After the first checkout, show the **Smart Shopper Stats**:
 - **Railway service:** `services/kroger-oauth` (SERVICE_URL must match Railway URL in Kroger Developer Portal redirect URIs).
 
 ### Deploy
-- **Olive (Next.js):** Vercel project **cartpilot**; production domain **shopolive.xyz**. Deploy from repo or `npx vercel --prod` from `olive-e2e`.
+- **Olive (Next.js):** Vercel project **cartpilot**; production domain **shopolive.xyz**. Deploy from repo or `npx vercel --prod` from this repo.
 - **Kroger OAuth:** Railway; env: `KROGER_CLIENT_ID`, `KROGER_CLIENT_SECRET`, `SUPABASE_*`, `KROGER_SERVICE_SECRET`, `SERVICE_URL`.
 
 ---

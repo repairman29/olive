@@ -65,6 +65,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Accessible focus for buttons and controls - visible in light and dark */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--sage-advice);
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-heading), var(--font-body), system-ui, -apple-system, sans-serif;
 }

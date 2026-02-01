@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer, isSupabaseServerConfigured } from '@/lib/supabaseServer'
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit'
+
+const MAX_ITEMS_PER_REQUEST = 100
+const MAX_TERM_LENGTH = 200
 
 const KROGER_SERVICE = process.env.NEXT_PUBLIC_KROGER_SERVICE_URL
 const SERVICE_SECRET = process.env.KROGER_SERVICE_SECRET
@@ -147,6 +151,15 @@ async function searchProduct(
 }
 
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request)
+  const limit = checkRateLimit(ip, 30, 60_000)
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { success: false, error: 'Too many requests. Try again in a moment.' },
+      { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+    )
+  }
+
   if (!KROGER_SERVICE || !SERVICE_SECRET) {
     return NextResponse.json(
       { success: false, error: 'Kroger service not configured (missing NEXT_PUBLIC_KROGER_SERVICE_URL or KROGER_SERVICE_SECRET)' },
@@ -169,6 +182,23 @@ export async function POST(request: NextRequest) {
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'No items provided' }, { status: 400 })
+    }
+
+    if (items.length > MAX_ITEMS_PER_REQUEST) {
+      return NextResponse.json(
+        { success: false, error: `Maximum ${MAX_ITEMS_PER_REQUEST} items per request` },
+        { status: 400 }
+      )
+    }
+
+    for (let i = 0; i < items.length; i++) {
+      const term = typeof items[i] === 'string' ? items[i] : items[i]?.term
+      if (typeof term === 'string' && term.length > MAX_TERM_LENGTH) {
+        return NextResponse.json(
+          { success: false, error: `Item term at position ${i + 1} exceeds ${MAX_TERM_LENGTH} characters` },
+          { status: 400 }
+        )
+      }
     }
 
     let mode: ShoppingMode = bodyMode === 'budget' ? 'budget' : 'splurge'

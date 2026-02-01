@@ -25,14 +25,14 @@ The add-to-cart route returns 503 in **exactly three** cases (in order):
 ## Deployment vs domain (why we might still get 503)
 
 - **Vercel project:** `jeff-adkins-projects/cartpilot`. We ran `vercel env ls` and confirmed `KROGER_CLIENT_ID` and `KROGER_CLIENT_SECRET` are set for **Production**.
-- **Important:** The **production domain** (shopolive.xyz) is assigned to one specific deployment. That deployment is usually “latest from the **production branch** of the **connected Git repo**” (e.g. `repairman29/olive` main).
-- When we ran `vercel --prod` from **olive-e2e** (CLAWDBOT), we created a **new** deployment from **local files**. That deployment gets a URL like `cartpilot-xxx.vercel.app`, but **shopolive.xyz might still be pointing at an older Git-based deployment** that was built when env vars were missing or different. So the live site can still be an old build.
+- **Important:** The **production domain** (shopolive.xyz) is assigned to one specific deployment. That deployment is usually “latest from the **production branch** of the **connected Git repo**” (e.g. `main`).
+- When you run `vercel --prod` from **this repo (olive)** locally, you create a **new** deployment from **local files**. That deployment gets a URL like `cartpilot-xxx.vercel.app`, but **shopolive.xyz might still be pointing at an older Git-based deployment** that was built when env vars were missing or different. So the live site can still be an old build.
 
 **Takeaway:** For shopolive.xyz to use the env vars, the deployment that **Vercel assigns to the production domain** must be one that was built **after** the vars were set. That usually means:
 - **Redeploy from the Vercel Dashboard** (Deployments → ⋯ on latest **Production** → Redeploy, **uncheck** “Use existing Build Cache”), **or**
 - **Push a commit** to the connected repo’s production branch so Vercel builds from Git.
 
-Deploying from the CLI from olive-e2e does **not** by itself change which deployment serves shopolive.xyz unless the project is configured to use “latest deployment” for production (some setups do that).
+Deploying from the CLI from this repo does **not** by itself change which deployment serves shopolive.xyz unless the project is configured to use “latest deployment” for production (some setups do that).
 
 ---
 
@@ -62,19 +62,19 @@ A small **diagnostic route** was added: **GET** `/api/kroger/env-check`. It retu
 
 ## Step 2: Deploy the diagnostic (and fixes) to the live site
 
-The diagnostic route and the dashboard crash fix live in **olive-e2e** (CLAWDBOT). For shopolive.xyz to get them:
+The diagnostic route and the dashboard crash fix live in **this repo**. For shopolive.xyz to get them:
 
-**Option A – Vercel is connected to repairman29/olive**
+**Option A – Vercel is connected to this Git repo**
 
-1. Copy the new/updated files from CLAWDBOT into **repairman29/olive**:
-   - `olive-e2e/src/app/api/kroger/env-check/route.ts` → `src/app/api/kroger/env-check/route.ts`
-   - `olive-e2e/src/app/dashboard/page.tsx` (add-to-cart handler + safe results) → `src/app/dashboard/page.tsx`
+1. Ensure the repo has the env-check route and defensive dashboard handler:
+   - `src/app/api/kroger/env-check/route.ts`
+   - `src/app/dashboard/page.tsx` (add-to-cart handler + safe results)
 2. Commit and push to the production branch (e.g. `main`).
 3. Wait for Vercel to build and assign the new deployment to Production (if that’s how the project is set up). Confirm **Settings → Domains** that shopolive.xyz is on this project and production.
 
-**Option B – Deploy from olive-e2e and make that deployment production**
+**Option B – Deploy from this repo and make that deployment production**
 
-1. From CLAWDBOT: `cd olive-e2e && npx vercel --prod --yes`
+1. From the repo root: `npx vercel --prod --yes`
 2. In Vercel Dashboard → **cartpilot** → **Deployments**: find this new deployment and **promote it to Production** (e.g. ⋯ → “Promote to Production”) so that shopolive.xyz serves it.
 3. Then open https://shopolive.xyz/api/kroger/env-check and use the interpretation above.
 

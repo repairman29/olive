@@ -1,8 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit'
 
 const SPOONACULAR_API = 'https://api.spoonacular.com'
 
+/** Max URL length (chars). */
+const MAX_URL_LENGTH = 2048
+
+/** Allowed hostnames for recipe extract (Spoonacular supports these). */
+const ALLOWED_EXTRACT_HOSTS = new Set([
+  'allrecipes.com',
+  'foodnetwork.com',
+  'food.com',
+  'epicurious.com',
+  'bbcgoodfood.com',
+  'delish.com',
+  'tasteofhome.com',
+  'eatingwell.com',
+  'bonappetit.com',
+  'seriouseats.com',
+  'thekitchn.com',
+  'marthastewart.com',
+  'bettycrocker.com',
+  'pillsbury.com',
+  'spoonacular.com',
+])
+
 type SpoonacularIngredient = { name?: string; original?: string; amount?: number; unit?: string }
+
+function validateExtractUrl(url: string): { ok: true } | { ok: false; error: string } {
+  if (url.length > MAX_URL_LENGTH) {
+    return { ok: false, error: `URL must be ${MAX_URL_LENGTH} characters or less` }
+  }
+  let parsed: URL
+  try {
+    parsed = new URL(url)
+  } catch {
+    return { ok: false, error: 'Invalid URL' }
+  }
+  if (parsed.protocol !== 'https:') {
+    return { ok: false, error: 'Only https URLs are allowed' }
+  }
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, '')
+  if (!ALLOWED_EXTRACT_HOSTS.has(host)) {
+    return { ok: false, error: 'Recipe URL must be from an allowed recipe site' }
+  }
+  return { ok: true }
+}
 
 /**
  * POST /api/recipes/extract
@@ -10,6 +53,15 @@ type SpoonacularIngredient = { name?: string; original?: string; amount?: number
  * Uses Spoonacular "Extract Recipe from Website". Returns name, servings, ingredients for scaling in the UI.
  */
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request)
+  const limit = checkRateLimit(ip, 15, 60_000)
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Try again in a moment.' },
+      { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+    )
+  }
+
   const key = process.env.SPOONACULAR_API_KEY
   if (!key) {
     return NextResponse.json(
@@ -22,6 +74,11 @@ export async function POST(request: NextRequest) {
   const url = typeof body.url === 'string' ? body.url.trim() : ''
   if (!url) {
     return NextResponse.json({ error: 'Missing url' }, { status: 400 })
+  }
+
+  const valid = validateExtractUrl(url)
+  if (!valid.ok) {
+    return NextResponse.json({ error: valid.error }, { status: 400 })
   }
 
   try {
