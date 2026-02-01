@@ -6,7 +6,7 @@ test.describe('Home / Landing', () => {
     await expect(page.getByText('Olive').first()).toBeVisible()
     await expect(page.getByRole('heading', { name: /your kitchen companion/i })).toBeVisible()
     await expect(page.getByRole('button', { name: /join the beta/i })).toBeVisible()
-    await expect(page.getByRole('link', { name: /continue with kroger/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /continue with kroger/i }).first()).toBeVisible()
     await expect(page.getByRole('link', { name: /view cart/i })).toBeVisible()
   })
 
@@ -24,7 +24,7 @@ test.describe('Home / Landing', () => {
 
   test('Continue with Kroger goes to login with then=connect', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('link', { name: /continue with kroger/i }).click()
+    await page.getByRole('link', { name: /continue with kroger/i }).first().click()
     await expect(page).toHaveURL(/\/login/)
     await expect(page).toHaveURL(/then=connect/)
   })

@@ -36,7 +36,7 @@ export function SignInWithGoogle({ onError, redirectTo = '/dashboard', className
       onClick={handleGoogleSignIn}
       className={
         className ||
-        'w-full flex items-center justify-center gap-2 py-3.5 border border-[#dce5cc] rounded-xl hover:bg-[#f8faf5] transition text-[#2d3a1f] font-medium bg-white'
+        'w-full flex items-center justify-center gap-2 py-3.5 border border-[var(--border)] rounded-xl hover:bg-[var(--input)] transition text-[var(--cast-iron)] font-medium bg-[var(--card)]'
       }
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden>

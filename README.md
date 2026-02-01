@@ -46,6 +46,14 @@ Open [http://localhost:3001](http://localhost:3001) (or the port shown).
 
 Set the same env vars in Vercel. Olive is served at [shopolive.xyz](https://shopolive.xyz).
 
+## Recipe search (optional)
+
+“Shop for a recipe” uses recipes from Supabase by default. To also **search thousands of recipes from the web**, set:
+
+- **SPOONACULAR_API_KEY** – get a free key at [spoonacular.com/food-api](https://spoonacular.com/food-api)
+
+With this set, the recipe modal shows a “Search more recipes (Spoonacular)” box and **Paste recipe link**: paste a URL from AllRecipes, Food Network, etc., and we extract the ingredients (via Spoonacular’s extract API), let you set servings, and add them to your list.
+
 ## Docs
 
 - [Troubleshooting](docs/TROUBLESHOOTING.md) – console noise, 401, PWA icons

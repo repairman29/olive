@@ -7,9 +7,9 @@
 
 ## What Olive is
 
-Olive is a **grocery list and recipe app** that connects to **Kroger / King Soopers**. Users build a list (by typing, from recipes, or from “usual” items), choose how they shop (Budget vs Splurge), then send items into their Kroger cart in one action. The goal is to make list-building and cart-filling feel light and intentional instead of tedious.
+Olive is a **grocery list and recipe app** that connects to **Kroger (King Soopers, etc.)**. Users build a list (by typing, from recipes, or from “usual” items), choose how they shop (Budget vs Splurge), then send items into their Kroger cart in one action. The goal is to make list-building and cart-filling feel light and intentional instead of tedious.
 
-**Current stage:** Friends-and-family beta. Core flows work; we’re ready to invest in design so the experience feels cohesive, trustworthy, and easy to use on phone and desktop.
+**Current stage:** Friends-and-family beta. Core flows work; we’re ready to invest in design so the experience feels cohesive, trustworthy, and easy on phone and desktop.
 
 ---
 
@@ -37,7 +37,7 @@ We’re not trying to replace the Kroger app; we’re a **list and recipe layer*
      - Your saved recipes (with options like protein/sauce).  
      - Search more recipes (Spoonacular).  
      - Paste recipe link (extract ingredients from AllRecipes, Food Network, etc.).  
-     User picks a recipe, sets servings, (optionally) picks variants, then adds ingredients to the list.  
+    User picks a recipe, sets servings, optionally picks variants, then adds ingredients to the list.  
    - **Your store** — set/change preferred Kroger location by ZIP; used for product search and add-to-cart.  
    - **Budget vs Splurge** — toggle: Budget = sale items and best price per unit; Splurge = preferred brands when we have data.  
    - **Current Haul** — the list; each line can be “Add to Kroger Cart” (search Kroger, pick product, add).  
@@ -47,7 +47,7 @@ We’re not trying to replace the Kroger app; we’re a **list and recipe layer*
    - **Sign out.**
 
 4. **Post–add to cart**  
-   Link to open the user’s Kroger cart (e.g. King Soopers) in a new tab so they can checkout there.
+   Link to open the user’s Kroger cart (e.g. King Soopers) in a new tab so they can checkout there. Checkout and pickup happen in Kroger; Olive does not place orders.
 
 So the main loop is: **list (manual + recipes) → set store & mode → Add to Kroger Cart → open cart in Kroger.**
 
