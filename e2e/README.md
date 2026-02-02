@@ -34,6 +34,17 @@ You can also set `PLAYWRIGHT_TEST_BASE_URL=https://shopolive.xyz` and run `npx p
 npm run test:e2e:ui
 ```
 
+## Toggle tests (Budget/Splurge, Exact/Grandma)
+
+To verify the mode and quantity toggles are visible and work:
+
+```bash
+# With credentials in .env.test (or after auth-setup with --project=chromium-authed):
+npm run test:e2e -- --project=chromium --grep "Mode toggle|Quantity toggle|Budget vs Splurge|Quantity Strategy"
+```
+
+Tests: both options visible and switchable for Budget/Splurge and Exact/Grandma; toggles visible in dark mode after switching theme.
+
 ## Authenticated dashboard tests (add-to-cart, King Soopers cart)
 
 These tests need a signed-in user. You can use **saved login (Google)** or **email/password**.

@@ -205,16 +205,31 @@ export async function POST(request: NextRequest) {
     let strategy: QuantityStrategy = bodyStrategy === 'overshoot' ? 'overshoot' : 'exact'
     let preferencesByTerm: Record<string, string | null> = {}
     let locationId = DEFAULT_LOCATION_ID
+    let cartDomain = CART_DOMAIN
 
     if (isSupabaseServerConfigured() && supabaseServer && userId) {
       const { data: settings } = await supabaseServer
         .from('olive_user_settings')
-        .select('shopping_mode, kroger_location_id, quantity_strategy')
+        .select('shopping_mode, kroger_location_id, quantity_strategy, kroger_cart_domain, active_store_id')
         .eq('user_id', userId)
         .maybeSingle()
       if (settings?.shopping_mode === 'budget') mode = 'budget'
       if (settings?.quantity_strategy === 'overshoot') strategy = 'overshoot'
-      if (settings?.kroger_location_id) locationId = settings.kroger_location_id
+      if (settings?.active_store_id) {
+        const { data: activeStore } = await supabaseServer
+          .from('olive_user_stores')
+          .select('location_id, cart_domain')
+          .eq('id', settings.active_store_id)
+          .eq('user_id', userId)
+          .maybeSingle()
+        if (activeStore) {
+          locationId = activeStore.location_id
+          cartDomain = activeStore.cart_domain
+        }
+      } else {
+        if (settings?.kroger_location_id) locationId = settings.kroger_location_id
+        if (settings?.kroger_cart_domain) cartDomain = settings.kroger_cart_domain
+      }
 
       const terms = items.map((item: string | { term: string }) =>
         typeof item === 'string' ? item : item.term
@@ -393,7 +408,7 @@ export async function POST(request: NextRequest) {
       success: addData.success || addRes.ok,
       results,
       totalSavings: Number(totalSavings.toFixed(2)),
-      cartUrl: `https://${CART_DOMAIN}/shopping/cart`,
+      cartUrl: `https://${cartDomain}/shopping/cart`,
       shopping_mode_used: mode,
     })
   } catch (e: unknown) {

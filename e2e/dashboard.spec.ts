@@ -12,13 +12,13 @@ test.describe('Dashboard (unauthenticated)', () => {
 })
 
 test.describe('Dashboard (authenticated)', () => {
-  test.skip(
-    !(process.env.TEST_USER_EMAIL && process.env.TEST_USER_PASSWORD) && test.info().project?.name !== 'chromium-authed',
-    'Use saved login (npm run test:e2e:auth-setup then --project=chromium-authed) or set TEST_USER_EMAIL and TEST_USER_PASSWORD'
-  )
-
-  test.beforeEach(async ({ page }) => {
-    if (test.info().project?.name === 'chromium-authed') {
+  test.beforeEach(async ({ page }, testInfo) => {
+    const hasCreds = !!(process.env.TEST_USER_EMAIL && process.env.TEST_USER_PASSWORD)
+    const useStoredAuth = testInfo.project?.name === 'chromium-authed'
+    if (!hasCreds && !useStoredAuth) {
+      test.skip(true, 'Use saved login (npm run test:e2e:auth-setup then --project=chromium-authed) or set TEST_USER_EMAIL and TEST_USER_PASSWORD')
+    }
+    if (useStoredAuth) {
       await page.goto('/dashboard')
       await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 })
       return
@@ -46,6 +46,21 @@ test.describe('Dashboard (authenticated)', () => {
     await expect(page.getByText(/sale items first, then best price per unit/i)).toBeVisible()
   })
 
+  test('Mode toggle: Budget and Splurge both visible and switchable', async ({ page }) => {
+    await expect(page.getByText(/how should olive pick items/i)).toBeVisible()
+    const budgetBtn = page.getByRole('button', { name: /budget mode|^budget$/i })
+    const splurgeBtn = page.getByRole('button', { name: /splurge mode|^splurge$/i })
+    await expect(budgetBtn).toBeVisible()
+    await expect(splurgeBtn).toBeVisible()
+
+    await splurgeBtn.click()
+    await expect(page.getByText(/sale items first, then best price per unit/i)).toBeVisible()
+
+    await budgetBtn.click()
+    await expect(budgetBtn).toBeVisible()
+    await expect(splurgeBtn).toBeVisible()
+  })
+
   test('Quantity Strategy toggle exists and is clickable', async ({ page }) => {
     await expect(page.getByText(/how much should olive buy/i)).toBeVisible()
     const card = page.getByTestId('quantity-strategy-card')
@@ -53,6 +68,42 @@ test.describe('Dashboard (authenticated)', () => {
     await expect(toggle).toBeVisible()
     await toggle.click()
     await expect(page.getByText(/exact.*closest match|grandma.*extra/i)).toBeVisible()
+  })
+
+  test('Quantity toggle: Exact and Grandma both visible and switchable', async ({ page }) => {
+    const card = page.getByTestId('quantity-strategy-card')
+    await expect(card).toBeVisible()
+    const exactBtn = card.getByRole('button', { name: /exact quantity|^exact$/i })
+    const grandmaBtn = card.getByRole('button', { name: /grandma mode|^grandma$/i })
+    await expect(exactBtn).toBeVisible()
+    await expect(grandmaBtn).toBeVisible()
+
+    await grandmaBtn.click()
+    await expect(page.getByText(/exact.*closest match|grandma.*extra/i)).toBeVisible()
+
+    await exactBtn.click()
+    await expect(exactBtn).toBeVisible()
+    await expect(grandmaBtn).toBeVisible()
+  })
+
+  test('Mode toggles visible in dark mode', async ({ page }) => {
+    const themeToggle = page.getByRole('button', { name: /switch to (dark|light) mode/i })
+    await expect(themeToggle).toBeVisible()
+
+    const isDark = await page.evaluate(() => document.documentElement.classList.contains('dark'))
+    if (!isDark) {
+      await themeToggle.click()
+      await expect(page.locator('html')).toHaveClass(/dark/, { timeout: 3000 })
+    }
+
+    await expect(page.getByText(/how should olive pick items/i)).toBeVisible()
+    await expect(page.getByRole('button', { name: /budget/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: /splurge/i })).toBeVisible()
+
+    const quantityCard = page.getByTestId('quantity-strategy-card')
+    await expect(quantityCard).toBeVisible()
+    await expect(quantityCard.getByRole('button', { name: /exact/i })).toBeVisible()
+    await expect(quantityCard.getByRole('button', { name: /grandma/i })).toBeVisible()
   })
 
   test('quantity merging in list', async ({ page }) => {

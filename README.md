@@ -16,7 +16,7 @@ Your kitchen companion — taking the chore out of the grocery store. Add items 
 | `public` | Static assets, PWA manifest and icons |
 | `docs` | Product manual, design brief, troubleshooting, beta guide |
 | `e2e` | Playwright end-to-end tests |
-| `supabase` | SQL migrations (memory, settings, recipes, store preference) |
+| `supabase` | SQL migrations (memory, settings, recipes, store preference, saved lists) |
 | `scripts` | Utilities (create-test-user, set-password-for-google-user) |
 
 ---
@@ -34,6 +34,7 @@ In the SQL Editor for **rbfzlqmkwhbvrrfdcain**, run (in order):
 
 1. **Memory tables:** paste and run contents of `supabase/memory.sql`
 2. **User settings (Budget/Splurge):** paste and run contents of `supabase/settings.sql`
+3. **Saved lists (templates):** paste and run contents of `supabase/saved-lists.sql`
 
 ### 2. Env vars
 

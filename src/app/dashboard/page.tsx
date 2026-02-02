@@ -31,6 +31,17 @@ interface CartItem {
   price?: number
 }
 
+const STORE_CHAIN_OPTIONS: Array<{ label: string; chain: string; cartDomain: string }> = [
+  { label: 'Kroger', chain: 'Kroger', cartDomain: 'www.kroger.com' },
+  { label: 'King Soopers', chain: 'King Soopers', cartDomain: 'www.kingsoopers.com' },
+  { label: 'Fred Meyer', chain: 'Fred Meyer', cartDomain: 'www.fredmeyer.com' },
+  { label: 'Ralphs', chain: 'Ralphs', cartDomain: 'www.ralphs.com' },
+  { label: 'Fry\'s', chain: 'Fry\'s Food', cartDomain: 'www.frysfood.com' },
+  { label: 'Smith\'s', chain: 'Smith\'s Food and Drug', cartDomain: 'www.smithsfoodanddrug.com' },
+  { label: 'QFC', chain: 'QFC', cartDomain: 'www.qfc.com' },
+  { label: 'Harris Teeter', chain: 'Harris Teeter', cartDomain: 'www.harristeeter.com' },
+]
+
 function DashboardContent() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -62,6 +73,10 @@ function DashboardContent() {
   const [storeLocationsLoading, setStoreLocationsLoading] = useState(false)
   const [storeLocationError, setStoreLocationError] = useState<string | null>(null)
   const [storeSaveError, setStoreSaveError] = useState<string | null>(null)
+  const [storeChain, setStoreChain] = useState<string>('Kroger')
+  const [savedStores, setSavedStores] = useState<Array<{ id: string; location_id: string; location_name: string; cart_domain: string; nickname?: string | null; created_at?: string }>>([])
+  const [savedStoresLoading, setSavedStoresLoading] = useState(false)
+  const [activeStoreId, setActiveStoreId] = useState<string | null>(null)
   const [recipeModalOpen, setRecipeModalOpen] = useState(false)
   const [recipeList, setRecipeList] = useState<Array<{ id: string; name: string; slug: string }>>([])
   const [recipeListLoading, setRecipeListLoading] = useState(false)
@@ -87,6 +102,11 @@ function DashboardContent() {
   const [extractedRecipe, setExtractedRecipe] = useState<{ name: string; servings: number; ingredients: Array<{ name: string; amount: number; unit: string }> } | null>(null)
   const [firstRunStep, setFirstRunStep] = useState(0)
   const [firstRunDone, setFirstRunDone] = useState(false)
+  const [savedLists, setSavedLists] = useState<Array<{ id: string; name: string; created_at: string; updated_at: string; item_count: number }>>([])
+  const [savedListsLoading, setSavedListsLoading] = useState(false)
+  const [saveListModalOpen, setSaveListModalOpen] = useState(false)
+  const [saveListName, setSaveListName] = useState('')
+  const [saveListSaving, setSaveListSaving] = useState(false)
   const recipeSearchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -263,6 +283,8 @@ function DashboardContent() {
     checkKrogerConnection(user.id)
     fetchUsuals(user.id)
     fetchSettings(user.id)
+    fetchSavedStores(user.id)
+    fetchSavedLists(user.id)
     setLoading(false)
   }
 
@@ -297,6 +319,19 @@ function DashboardContent() {
     }
   }
 
+  const fetchSavedLists = async (userId: string) => {
+    try {
+      setSavedListsLoading(true)
+      const res = await fetch(`/api/memory/saved-lists?userId=${userId}`)
+      const data = await res.json()
+      if (Array.isArray(data.lists)) setSavedLists(data.lists)
+    } catch (e) {
+      console.error('Failed to fetch saved lists:', e)
+    } finally {
+      setSavedListsLoading(false)
+    }
+  }
+
   const fetchSettings = async (userId: string) => {
     try {
       const res = await fetch(`/api/memory/settings?userId=${userId}`)
@@ -313,8 +348,26 @@ function DashboardContent() {
         const zipMatch = String(data.kroger_location_name).match(/\b\d{5}(?:-\d{4})?\b/)
         if (zipMatch?.[0]) setStoreZip(zipMatch[0].slice(0, 5))
       }
+      if (data.kroger_cart_domain) {
+        const match = STORE_CHAIN_OPTIONS.find((o) => o.cartDomain === data.kroger_cart_domain)
+        if (match) setStoreChain(match.label)
+      }
+      setActiveStoreId(data.active_store_id ?? null)
     } catch (e) {
       console.error('Failed to fetch settings:', e)
+    }
+  }
+
+  const fetchSavedStores = async (userId: string) => {
+    try {
+      setSavedStoresLoading(true)
+      const res = await fetch(`/api/memory/stores?userId=${userId}`)
+      const data = await res.json()
+      if (Array.isArray(data.stores)) setSavedStores(data.stores)
+    } catch (e) {
+      console.error('Failed to fetch saved stores:', e)
+    } finally {
+      setSavedStoresLoading(false)
     }
   }
 
@@ -357,8 +410,10 @@ function DashboardContent() {
   const fetchStoreLocations = async () => {
     setStoreLocationError(null)
     setStoreLocationsLoading(true)
+    const chainOption = STORE_CHAIN_OPTIONS.find((o) => o.label === storeChain)
+    const chainParam = chainOption?.chain ?? 'Kroger'
     try {
-      const res = await fetch(`/api/kroger/locations?zip=${encodeURIComponent(storeZip)}&chain=King Soopers`)
+      const res = await fetch(`/api/kroger/locations?zip=${encodeURIComponent(storeZip)}&chain=${encodeURIComponent(chainParam)}`)
       const data = await res.json()
       if (!res.ok) {
         setStoreLocationError((data as { error?: string }).error || 'Location search failed. Check Kroger credentials or try another ZIP.')
@@ -791,10 +846,100 @@ function DashboardContent() {
     setExtractedRecipe(null)
   }
 
-  const setStore = async (locationId: string, displayName: string) => {
+  const setActiveStore = async (store: { id: string; location_id: string; location_name: string; nickname?: string | null }) => {
     if (!user) return
     setStoreSaveError(null)
     setStoreLoading(true)
+    try {
+      const res = await fetch(`/api/memory/stores/${store.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, set_active: true }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setStoreSaveError((data as { error?: string }).error || 'Could not set store.')
+        return
+      }
+      setActiveStoreId(store.id)
+      setStoreLocationId(store.location_id)
+      setStoreLocationName(store.nickname?.trim() || store.location_name)
+    } catch (e) {
+      console.error('Failed to set active store:', e)
+      setStoreSaveError('Network error. Try again.')
+    } finally {
+      setStoreLoading(false)
+    }
+  }
+
+  const deleteStore = async (storeId: string) => {
+    if (!user) return
+    setStoreSaveError(null)
+    setStoreLoading(true)
+    try {
+      const res = await fetch(`/api/memory/stores/${storeId}?userId=${encodeURIComponent(user.id)}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setStoreSaveError((data as { error?: string }).error || 'Could not remove store.')
+        return
+      }
+      setSavedStores((prev) => prev.filter((s) => s.id !== storeId))
+      if (activeStoreId === storeId) {
+        setActiveStoreId(null)
+        setStoreLocationId(null)
+        setStoreLocationName(null)
+      }
+    } catch (e) {
+      console.error('Failed to delete store:', e)
+      setStoreSaveError('Network error. Try again.')
+    } finally {
+      setStoreLoading(false)
+    }
+  }
+
+  const addStoreFromSearch = async (locationId: string, displayName: string) => {
+    if (!user) return
+    setStoreSaveError(null)
+    setStoreLoading(true)
+    const chainOption = STORE_CHAIN_OPTIONS.find((o) => o.label === storeChain)
+    const cartDomain = chainOption?.cartDomain ?? 'www.kroger.com'
+    try {
+      const res = await fetch('/api/memory/stores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          location_id: locationId,
+          location_name: displayName,
+          cart_domain: cartDomain,
+          set_active: true,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setStoreSaveError((data as { error?: string }).error || 'Could not add store.')
+        return
+      }
+      const store = data.store as { id: string; location_id: string; location_name: string; cart_domain: string; nickname?: string | null }
+      setSavedStores((prev) => [...prev, store])
+      setActiveStoreId(store.id)
+      setStoreLocationId(store.location_id)
+      setStoreLocationName(store.nickname?.trim() || store.location_name)
+      setStorePickerOpen(false)
+    } catch (e) {
+      console.error('Failed to add store:', e)
+      setStoreSaveError('Network error. Try again.')
+    } finally {
+      setStoreLoading(false)
+    }
+  }
+
+  const _unusedLegacy = async (_locationId: string, _displayName: string) => {
+    if (!user) return
+    setStoreSaveError(null)
+    setStoreLoading(true)
+    const chainOption = STORE_CHAIN_OPTIONS.find((o) => o.label === storeChain)
+    const cartDomain = chainOption?.cartDomain ?? 'www.kroger.com'
     try {
       const res = await fetch('/api/memory/settings', {
         method: 'PATCH',
@@ -802,8 +947,9 @@ function DashboardContent() {
         body: JSON.stringify({
           userId: user.id,
           shopping_mode: shoppingMode,
-          kroger_location_id: locationId,
-          kroger_location_name: displayName,
+          kroger_location_id: _locationId,
+          kroger_location_name: _displayName,
+          kroger_cart_domain: cartDomain,
         }),
       })
       const data = await res.json()
@@ -890,6 +1036,64 @@ function DashboardContent() {
     if (!term.trim() || isBlacklisted(term)) return
     setItems((prev) => mergeListItem(prev, { term, quantity: 1, unit: null }))
     setOliveMessage(message || `Added ${term}. Anything else?`)
+  }
+
+  const saveCurrentList = async () => {
+    if (!user || items.length === 0 || !saveListName.trim()) return
+    setSaveListSaving(true)
+    try {
+      const listItems = items.map((item) => {
+        const p = parseListItemDisplay(item)
+        return { term: p.term, quantity: p.quantity, unit: p.unit, notes: p.notes ?? null }
+      })
+      const res = await fetch('/api/memory/saved-lists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, name: saveListName.trim(), items: listItems }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to save list')
+      setSaveListModalOpen(false)
+      setSaveListName('')
+      setOliveMessage(`Saved "${saveListName.trim()}". Use it anytime from Saved lists.`)
+      fetchSavedLists(user.id)
+    } catch (e) {
+      setOliveMessage(e instanceof Error ? e.message : 'Could not save list')
+    } finally {
+      setSaveListSaving(false)
+    }
+  }
+
+  const loadSavedList = async (listId: string) => {
+    if (!user) return
+    try {
+      const res = await fetch(`/api/memory/saved-lists/${listId}?userId=${user.id}`)
+      const data = await res.json()
+      if (!res.ok || !data.list?.items) throw new Error(data.error || 'Could not load list')
+      const displayItems = data.list.items.map((item: { term: string; quantity?: number; unit?: string | null; notes?: string | null }) =>
+        formatListItem({
+          term: item.term,
+          quantity: Number(item.quantity) && item.quantity! > 0 ? item.quantity! : 1,
+          unit: item.unit ?? null,
+          notes: item.notes ?? null,
+        })
+      )
+      setItems(displayItems)
+      setOliveMessage(`Loaded "${data.list.name}". Add to Kroger Cart when you're ready.`)
+    } catch (e) {
+      setOliveMessage(e instanceof Error ? e.message : 'Could not load list')
+    }
+  }
+
+  const deleteSavedList = async (listId: string) => {
+    if (!user) return
+    try {
+      const res = await fetch(`/api/memory/saved-lists/${listId}?userId=${user.id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to delete')
+      fetchSavedLists(user.id)
+    } catch (e) {
+      console.error('Failed to delete saved list:', e)
+    }
   }
 
   const removeItem = (index: number) => {
@@ -1196,34 +1400,84 @@ function DashboardContent() {
           </p>
         </div>
 
-        {/* Your store */}
+        {/* Your store — picklist of saved stores (Option A) + add by ZIP */}
         <div className="bg-[var(--card)] rounded-3xl p-5 border border-[var(--border)] shadow-sm mb-6">
           <h3 className="text-[var(--cast-iron)] font-medium mb-3 text-sm">Your store</h3>
-          {storeLocationName ? (
-            <p className="text-[var(--muted-foreground)] text-sm mb-3">{storeLocationName}</p>
-          ) : (
-            <p className="text-[var(--muted)] text-sm mb-3">Set your King Soopers (or Kroger) store so Olive uses the right location.</p>
-          )}
           {storeSaveError && (
             <p className="text-red-600 text-sm mb-2">{storeSaveError}</p>
           )}
-          {!storePickerOpen ? (
-            <button
-              type="button"
-              onClick={() => {
-                const zipMatch = storeLocationName?.match(/\b\d{5}(?:-\d{4})?\b/)
-                if (zipMatch?.[0]) setStoreZip(zipMatch[0].slice(0, 5))
-                setStorePickerOpen(true)
-                setStoreLocations([])
-                setStoreLocationError(null)
-                setStoreSaveError(null)
-              }}
-              className="text-[var(--muted)] hover:text-[var(--sage-advice)] text-sm font-medium"
-            >
-              {storeLocationId ? 'Change store' : 'Set your store'}
-            </button>
-          ) : (
+          {savedStoresLoading ? (
+            <p className="text-[var(--muted)] text-sm">Loading stores…</p>
+          ) : savedStores.length > 0 ? (
             <div className="space-y-3">
+              <div className="flex flex-wrap gap-2 items-center">
+                <label htmlFor="store-picklist" className="text-[var(--muted-foreground)] text-sm sr-only">Choose store</label>
+                <select
+                  id="store-picklist"
+                  value={activeStoreId ?? ''}
+                  onChange={(e) => {
+                    const id = e.target.value
+                    if (!id) return
+                    const store = savedStores.find((s) => s.id === id)
+                    if (store) setActiveStore(store)
+                  }}
+                  disabled={storeLoading}
+                  className="flex-1 min-w-0 max-w-md px-3 py-2 bg-[var(--input)] border border-[var(--border)] rounded-xl text-sm text-[var(--cast-iron)] disabled:opacity-50"
+                >
+                  <option value="">Choose a store…</option>
+                  {savedStores.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.nickname?.trim() || s.location_name}
+                    </option>
+                  ))}
+                </select>
+                {activeStoreId && (
+                  <button
+                    type="button"
+                    onClick={() => activeStoreId && deleteStore(activeStoreId)}
+                    disabled={storeLoading}
+                    className="px-3 py-2 text-red-600 hover:text-red-700 text-sm disabled:opacity-50"
+                    aria-label="Remove selected store"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              {storeLocationName && activeStoreId && (
+                <p className="text-[var(--muted-foreground)] text-sm">{storeLocationName}</p>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  const zipMatch = storeLocationName?.match(/\b\d{5}(?:-\d{4})?\b/)
+                  if (zipMatch?.[0]) setStoreZip(zipMatch[0].slice(0, 5))
+                  setStorePickerOpen(true)
+                  setStoreLocations([])
+                  setStoreLocationError(null)
+                  setStoreSaveError(null)
+                }}
+                className="text-[var(--muted)] hover:text-[var(--sage-advice)] text-sm font-medium"
+              >
+                Add another store
+              </button>
+            </div>
+          ) : (
+            <p className="text-[var(--muted)] text-sm mb-3">Set your store (Kroger, King Soopers, etc.) so Olive uses the right location and cart link.</p>
+          )}
+          {storePickerOpen && (
+            <div className="mt-4 pt-4 border-t border-[var(--border)] space-y-3">
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="text-[var(--muted-foreground)] text-sm">Store chain:</span>
+                <select
+                  value={storeChain}
+                  onChange={(e) => setStoreChain(e.target.value)}
+                  className="px-3 py-2 bg-[var(--input)] border border-[var(--border)] rounded-xl text-sm text-[var(--cast-iron)]"
+                >
+                  {STORE_CHAIN_OPTIONS.map((opt) => (
+                    <option key={opt.cartDomain} value={opt.label}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
@@ -1261,7 +1515,7 @@ function DashboardContent() {
                       <li key={loc.locationId}>
                         <button
                           type="button"
-                          onClick={() => setStore(loc.locationId, displayName)}
+                          onClick={() => addStoreFromSearch(loc.locationId, displayName)}
                           disabled={storeLoading}
                           className="w-full text-left px-3 py-2 rounded-xl bg-[var(--input)] hover:bg-[var(--olive-100)] text-[var(--cast-iron)] text-sm disabled:opacity-50"
                         >
@@ -1273,6 +1527,20 @@ function DashboardContent() {
                 </ul>
               )}
             </div>
+          )}
+          {!storePickerOpen && savedStores.length === 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setStorePickerOpen(true)
+                setStoreLocations([])
+                setStoreLocationError(null)
+                setStoreSaveError(null)
+              }}
+              className="text-[var(--muted)] hover:text-[var(--sage-advice)] text-sm font-medium"
+            >
+              Set your store
+            </button>
           )}
         </div>
 
@@ -1499,13 +1767,22 @@ function DashboardContent() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           {/* Current Haul - Main Card */}
           <div data-testid="current-haul-card" className="col-span-1 sm:col-span-2 bg-[var(--card)] rounded-3xl p-5 border border-[var(--border)] shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="text-lg">🛒</span>
               <h3 className="text-[var(--cast-iron)] font-medium">Current Haul</h3>
               {items.length > 0 && (
-                <span className="ml-auto text-sm text-[var(--muted)]">
-                  {items.reduce((sum, item) => sum + itemDisplayCount(item), 0)} items
-                </span>
+                <div className="ml-auto flex items-center gap-3">
+                  <span className="text-sm text-[var(--muted)]">
+                    {items.reduce((sum, item) => sum + itemDisplayCount(item), 0)} items
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSaveListModalOpen(true)}
+                    className="text-sm text-[var(--sage-advice)] hover:underline"
+                  >
+                    Save as template
+                  </button>
+                </div>
               )}
             </div>
           {selectedItems.size > 0 && (
@@ -1729,7 +2006,7 @@ function DashboardContent() {
             <span>Quick add</span>
             {usualsLoading && <span className="text-xs">• loading usuals</span>}
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
             {[...new Set([...usuals, 'Milk', 'Eggs', 'Bread', 'Bananas', 'Butter'])].slice(0, 8).map((item) => (
               <PredictiveChip
                 key={item}
@@ -1744,6 +2021,44 @@ function DashboardContent() {
               </PredictiveChip>
             ))}
           </div>
+
+          {/* Saved lists (templates) */}
+          <div className="mb-3 text-[var(--muted)] text-sm font-medium">Saved lists</div>
+          <p className="text-[var(--muted-foreground)] text-xs mb-3">Build once, use anytime. Load a list then push to Kroger when you're ready.</p>
+          {savedListsLoading ? (
+            <p className="text-xs text-[var(--muted)]">Loading…</p>
+          ) : savedLists.length === 0 ? (
+            <p className="text-xs text-[var(--muted)]">No saved lists yet. Add items above and tap &quot;Save as template&quot; to create one.</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {savedLists.map((list) => (
+                <div
+                  key={list.id}
+                  className="flex flex-wrap items-center justify-between gap-2 bg-[var(--input)] dark:bg-[var(--surface-elevated)] rounded-xl px-4 py-3 border border-[var(--border)]"
+                >
+                  <div>
+                    <span className="text-[var(--cast-iron)] font-medium">{list.name}</span>
+                    <span className="ml-2 text-xs text-[var(--muted)]">{list.item_count} items</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <SageAdviceButton
+                      onClick={() => loadSavedList(list.id)}
+                      className="px-3 py-1.5 text-sm"
+                    >
+                      Use this list
+                    </SageAdviceButton>
+                    <button
+                      type="button"
+                      onClick={() => deleteSavedList(list.id)}
+                      className="px-3 py-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--heirloom-tomato)]"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         )}
       </div>
@@ -1764,6 +2079,29 @@ function DashboardContent() {
           </SageAdviceButton>
         )}
       />
+
+      {saveListModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => !saveListSaving && setSaveListModalOpen(false)}>
+          <div className="bg-[var(--card)] rounded-3xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-[var(--cast-iron)] font-medium mb-2">Save as template</h3>
+            <p className="text-[var(--muted-foreground)] text-xs mb-4">Give this list a name (e.g. &quot;Super Bowl party&quot;) and use it anytime.</p>
+            <input
+              type="text"
+              value={saveListName}
+              onChange={(e) => setSaveListName(e.target.value)}
+              placeholder="e.g. Super Bowl party, Weekly staples"
+              className="w-full px-3 py-2.5 bg-[var(--input)] border border-[var(--border)] rounded-xl text-[var(--cast-iron)] text-sm mb-4"
+              onKeyDown={(e) => e.key === 'Enter' && saveCurrentList()}
+            />
+            <div className="flex gap-2">
+              <SageAdviceButton onClick={saveCurrentList} disabled={saveListSaving || !saveListName.trim()} className="flex-1 py-2.5">
+                {saveListSaving ? 'Saving…' : 'Save list'}
+              </SageAdviceButton>
+              <button type="button" onClick={() => !saveListSaving && setSaveListModalOpen(false)} className="px-4 py-2.5 text-[var(--muted-foreground)] text-sm">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {blobModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => setBlobModalOpen(false)}>
