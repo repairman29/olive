@@ -34,12 +34,16 @@ function LoginContent() {
         throw new Error('Olive is not configured yet. Please check the Supabase keys.')
       }
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
         })
         if (error) throw error
-        setMessage('Check your email for the confirmation link!')
+        if (data.session) {
+          router.push(thenConnect ? '/dashboard?connectKroger=1' : '/dashboard')
+        } else {
+          setMessage('Check your email for the confirmation link.')
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -166,7 +170,7 @@ function LoginContent() {
             </button>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-[var(--border)] text-center">
+          <div className="mt-6 pt-6 border-t border-[var(--border)] text-center space-y-2">
             <Link
               href="/login?then=connect"
               className="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--cast-iron)] text-sm"
@@ -175,6 +179,11 @@ function LoginContent() {
               <span>Continue with Kroger</span>
               <span className="text-[var(--muted)] text-xs">(sign in first)</span>
             </Link>
+            <p className="text-xs text-[var(--muted)]">
+              <Link href="/terms" className="hover:text-[var(--sage-advice)]">Terms</Link>
+              <span className="mx-1.5">·</span>
+              <Link href="/privacy" className="hover:text-[var(--sage-advice)]">Privacy</Link>
+            </p>
           </div>
         </div>
       </div>

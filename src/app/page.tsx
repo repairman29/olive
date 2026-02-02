@@ -299,7 +299,12 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-[var(--border)] py-6 bg-[var(--card)]/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center text-[var(--muted)] text-sm">
-          <p>Made with care • Olive never places orders for you • Not affiliated with Kroger</p>
+          <p className="mb-2">Made with care • Olive never places orders for you • Not affiliated with Kroger</p>
+          <p>
+            <Link href="/terms" className="hover:text-[var(--sage-advice)] transition">Terms</Link>
+            <span className="mx-1.5">·</span>
+            <Link href="/privacy" className="hover:text-[var(--sage-advice)] transition">Privacy</Link>
+          </p>
         </div>
       </footer>
     </main>

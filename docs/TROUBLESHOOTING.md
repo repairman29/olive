@@ -54,6 +54,8 @@ Then redeploy: `vercel --prod` or Vercel Dashboard → Redeploy.
 **Cause:** PWA manifest asks for icons; either they weren’t deployed or the browser cached an old manifest.  
 **Fix:** `public/icon-192.png` and `public/icon-512.png` exist in the repo. If you see 404 on **shopolive.xyz**, commit and push, then trigger a new Vercel deploy so `public/` is updated. Hard-refresh (Ctrl+Shift+R / Cmd+Shift+R) or clear site data for shopolive.xyz to drop the old manifest cache.
 
+**Branding:** For production, replace these with 192×192 and 512×512 Olive-branded PNGs so "Add to Home Screen" and splash screens show your logo.
+
 ---
 
 ## Sign up / Sign in returns 401

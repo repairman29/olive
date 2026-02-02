@@ -27,9 +27,18 @@ function ConnectSuccessContent() {
         </div>
 
         <h1 className="text-3xl font-serif mb-2">You&rsquo;re all set!</h1>
-        <p className="text-[var(--muted-foreground)] mb-8 leading-relaxed">
+        <p className="text-[var(--muted-foreground)] mb-6 leading-relaxed">
           Olive is now connected to your <span className="font-semibold text-[var(--cast-iron)]">{storeName}</span>. She&rsquo;s ready to start tucking items into your cart.
         </p>
+        <div className="mb-8">
+          <SageAdviceButton
+            className="w-full py-3.5 text-base rounded-xl"
+            onClick={() => router.push('/dashboard')}
+          >
+            Go to My Kitchen →
+          </SageAdviceButton>
+          <p className="text-[var(--muted)] text-xs mt-2">You can close this tab if you opened Connect in a new window.</p>
+        </div>
 
         <div className="grid grid-cols-1 gap-4 mb-10 text-left">
           <BentoTile title="The Magic Paste">

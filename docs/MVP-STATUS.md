@@ -42,12 +42,12 @@
 
 ---
 
-## Optional polish (not required for MVP)
+## Optional polish (done)
 
-- **Post–Connect Kroger**: After OAuth success, redirect or link to shopolive.xyz/dashboard (today: user returns manually).
+- **Post–Connect Kroger**: Connect success page has a prominent "Go to My Kitchen" button and note about closing the tab.
 - **Email confirmation**: If Supabase “Confirm email” is on, mention “check your email” on signup.
-- **Real PWA icons**: Replace placeholder PNGs with 192×192 and 512×512 Olive icons.
-- **Terms / Privacy**: Add links if you want them for invite-only beta.
+- **PWA icons**: public/icon-192.png and icon-512.png exist; for production branding replace with Olive artwork (see TROUBLESHOOTING).
+- **Terms / Privacy**: /terms and /privacy placeholder pages; footer links on landing and login.
 
 ---
 
