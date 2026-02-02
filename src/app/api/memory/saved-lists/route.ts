@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ lists: [] })
   }
 
-  const { data: lists, error } = await supabaseServer
+  const db = supabaseServer
+  const { data: lists, error } = await db
     .from('olive_saved_lists')
     .select('id, name, created_at, updated_at')
     .eq('user_id', userId)
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
 
   const withCounts = await Promise.all(
     (lists || []).map(async (list) => {
-      const { count } = await supabaseServer
+      const { count } = await db
         .from('olive_saved_list_items')
         .select('*', { count: 'exact', head: true })
         .eq('list_id', list.id)
@@ -63,7 +64,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Saved lists not configured' }, { status: 503 })
   }
 
-  const { data: list, error: listError } = await supabaseServer
+  const db = supabaseServer
+  const { data: list, error: listError } = await db
     .from('olive_saved_lists')
     .insert({
       user_id: uid,
@@ -86,9 +88,9 @@ export async function POST(request: NextRequest) {
       notes: typeof item.notes === 'string' ? item.notes.trim().slice(0, 200) : null,
       sort_order: i,
     }))
-    const { error: itemsError } = await supabaseServer.from('olive_saved_list_items').insert(rows)
+    const { error: itemsError } = await db.from('olive_saved_list_items').insert(rows)
     if (itemsError) {
-      await supabaseServer.from('olive_saved_lists').delete().eq('id', list.id)
+      await db.from('olive_saved_lists').delete().eq('id', list.id)
       return NextResponse.json({ error: itemsError.message }, { status: 500 })
     }
   }
