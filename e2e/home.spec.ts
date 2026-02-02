@@ -32,7 +32,7 @@ test.describe('Home / Landing', () => {
   test('shows How it Works and FAQ', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByText(/just tell her/i)).toBeVisible()
-    await expect(page.getByText(/coupons clipped/i)).toBeVisible()
+    await expect(page.getByText(/sale savings|fuel points/i)).toBeVisible()
     await expect(page.getByText(/does olive place the order/i)).toBeVisible()
   })
 

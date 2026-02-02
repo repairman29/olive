@@ -19,6 +19,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/, use: { ...devices['Desktop Chrome'] }, timeout: 150_000 },
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     {
       name: 'chromium-authed',

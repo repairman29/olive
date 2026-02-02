@@ -26,13 +26,15 @@ loadEnv('.env')
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
 const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
 const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY
-const email = process.env.TEST_USER_EMAIL || 'olive-e2e@example.com'
-const password = process.env.TEST_USER_PASSWORD || 'TestPassword123!'
+const email = process.env.TEST_USER_EMAIL || 'jeffadkins1@gmail.com'
+const password = process.env.TEST_USER_PASSWORD || 'OliveE2eTest123!'
 
-if (!url || !key) {
-  console.error('Missing Supabase config. Set in .env.test or .env.local:')
-  console.error('  NEXT_PUBLIC_SUPABASE_URL')
-  console.error('  NEXT_PUBLIC_SUPABASE_ANON_KEY')
+if (!url) {
+  console.error('Missing NEXT_PUBLIC_SUPABASE_URL in .env.test or .env.local')
+  process.exit(1)
+}
+if (!serviceRole && !key) {
+  console.error('Set SUPABASE_SERVICE_ROLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) in .env.test or .env.local')
   process.exit(1)
 }
 

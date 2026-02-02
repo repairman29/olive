@@ -12,7 +12,7 @@
 2. **Recipe → haul** — E2E already covers “add ingredients from recipe → haul has items”; keep it green and add more specific ingredient assertions if desired.
 3. **Onboarding** — First-run guide, Connect Kroger timing, First Haul celebration copy; align with §5 and §6.
 4. **Add-to-cart reliability** — If 503s or “couldn’t add” spike, use [docs/ADD-TO-CART-503-REVIEW.md](ADD-TO-CART-503-REVIEW.md) and env-check; tune error messaging.
-5. **Bento & progress** — Fuel points / coupons tiles, typewriter progress; ship or hide until ready. (No separate “granny narrative” — the logic is in code.)
+5. **Bento & progress** — Fuel points / sale-savings tiles, typewriter progress; ship or hide until ready. (No separate “granny narrative” — the logic is in code.)
 
 ---
 
@@ -52,7 +52,7 @@ To maintain the brand vibe, use these named tokens for all UI elements.
 3.  **Mode Toggle:** Segmented pill toggle between **Budget** (sale-first) and **Splurge** (brand-first).
 4.  **Quantity Toggle:** Segmented pill toggle between **"Exact"** and **"Grandma Mode"** (Overshoot).
 5.  **Narrative Progress:** Typewriter-style status updates instead of a generic circular spinner.
-6.  **Bento Tiles:** Modular containers for secondary content (Fuel points, coupons).
+6.  **Bento Tiles:** Modular containers for secondary content (Fuel points, sale savings — we don't clip coupons).
 
 ---
 
@@ -87,7 +87,7 @@ To maintain the brand vibe, use these named tokens for all UI elements.
 ### Post-Haul Celebration
 After the first checkout, show the **Smart Shopper Stats**:
 *   **Time Saved:** (e.g., "12 minutes back in your life").
-*   **Savings Found:** (Total pennies saved vs regular prices).
+*   **Savings Found:** (What you saved from sale prices; we don't clip coupons — we show sale savings and fuel points).
 *   **Fuel Points:** Progress toward pump discounts.
 
 ---
@@ -142,8 +142,8 @@ After the first checkout, show the **Smart Shopper Stats**:
 ### First Haul Celebration
 - **Headline:** Mission accomplished!
 - **Sub-headline:** Olive is so happy she could help with your first haul. Here's how you did today:
-- **Savings Report:** Compared to regular prices, Olive saved you $X.XX on this haul (or placeholder until first haul).
-- **Stats:** Time Saved | Savings Found | Fuel Points.
+- **Savings Report:** Compared to regular prices, Olive saved you $X.XX on this haul from sale items (we don't clip coupons; we show sale savings and fuel points). Placeholder until first haul.
+- **Stats:** Time Saved | Savings from sale items | Fuel Points.
 - **Mentor Feedback:** "Did I get your brands right today?" — Nailed it! | Not quite.
 - **CTA:** "Back to My Kitchen" (Sage Advice).
 

@@ -35,7 +35,7 @@ export default function FirstHaulCelebrationPage() {
             </p>
           ) : (
             <p className="text-[var(--muted-foreground)] text-sm">
-              Your savings will appear here after your first haul. Olive tracks coupons and best-value picks so you see exactly how much you saved.
+              Your savings will appear here after your first haul. Olive tracks sale prices and best-value picks so you see exactly how much you saved (plus fuel points when we can).
             </p>
           )}
         </div>
@@ -46,9 +46,9 @@ export default function FirstHaulCelebrationPage() {
               You spent <span className="font-semibold text-[var(--cast-iron)]">12 minutes</span> in the kitchen instead of the app.
             </p>
           </BentoTile>
-          <BentoTile title="Savings Found">
+          <BentoTile title="Savings from sale items">
             <p className="text-sm text-[var(--muted-foreground)]">
-              Olive clipped coupons and saved you <span className="font-semibold text-[var(--cast-iron)]">${savings || '4.50'}</span>.
+              Olive saved you <span className="font-semibold text-[var(--cast-iron)]">${savings || '—'}</span> from sale prices on this haul.
             </p>
           </BentoTile>
           <BentoTile title="Fuel Points">

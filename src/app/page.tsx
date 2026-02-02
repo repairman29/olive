@@ -45,7 +45,7 @@ export default function Home() {
             </h1>
             <p className="text-base sm:text-lg text-[var(--muted-foreground)] mb-8 leading-relaxed">
               Turn messy lists and recipes into a filled Kroger cart in one tap. Olive finds the right brands,
-              clips the deals, and keeps you in control at checkout.
+              shows what you saved on sale items (and fuel points), and keeps you in control at checkout.
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap gap-3">
               <SageAdviceButton
@@ -107,8 +107,8 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5 text-center text-xs text-[var(--sage-advice)]">
               <div className="bg-[var(--input)] rounded-2xl py-3">
                 <div className="text-lg">🏷️</div>
-                Coupons
-                <div className="text-[11px] text-[var(--muted)] mt-1">12 deals spotted today</div>
+                Sale savings
+                <div className="text-[11px] text-[var(--muted)] mt-1">We show what you saved</div>
               </div>
               <div className="bg-[var(--input)] rounded-2xl py-3">
                 <div className="text-lg">⛽</div>
@@ -146,11 +146,10 @@ export default function Home() {
           <BentoTile>
             <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-sm">
               <span>🏷️</span>
-              <span className="absolute -right-1 -bottom-1 text-sm">✂️</span>
             </div>
-            <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Coupons Clipped</h3>
+            <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Sale savings & loyalty</h3>
             <p className="text-[var(--muted-foreground)] text-sm">
-              Olive finds digital deals on items you actually buy and applies them automatically.
+              Olive shows what you saved from sale prices and can surface fuel points — we don&apos;t clip digital coupons; clip those on Kroger for extra savings.
             </p>
           </BentoTile>
 
@@ -276,6 +275,10 @@ export default function Home() {
             <div>
               <p className="font-medium text-[var(--cast-iron)] mb-1">Is this free?</p>
               <p>During beta, yes. We just want feedback and real-world use.</p>
+            </div>
+            <div>
+              <p className="font-medium text-[var(--cast-iron)] mb-1">What savings does Olive show?</p>
+              <p>We show what you saved from sale prices and can surface fuel points. We don&apos;t clip digital coupons — clip those on Kroger for extra savings.</p>
             </div>
           </div>
         </div>

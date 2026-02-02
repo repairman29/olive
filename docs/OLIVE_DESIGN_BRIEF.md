@@ -104,7 +104,7 @@ Through a **Nir Eyal Hook Model** lens, Olive is a high-value **Facilitator**. T
 - **Budget vs Splurge** shouldn’t feel like a generic toggle. In **Budget**, the UI could emphasize “Savings applied” or sale badges; in **Splurge**, “Top rated” or “Favorite brand.” The mode should change the *vibe* of the list.  
 - **Batch Add to Kroger Cart** is a high-anxiety moment (“Will it work? Wrong milk?”). Don’t show only a spinner — show a **Narrative Progress Bar** so “waiting” becomes a **Variable Reward**. Example steps:  
   1. *“Searching for the best price on [current item]...”*  
-  2. *“Found! Clipping your coupon...”* (when applicable)  
+  2. *“Found! Checking sale price (we show sale savings and fuel points; we don't clip coupons)...”* (when applicable)  
   3. *“Tucking items into your cart at [Store Name]...”*  
   Each item can pulse or turn from grey to green “In cart” as it’s done. The user feels like Olive is working hard for them, increasing **Investment** and perceived value.
 
@@ -115,7 +115,7 @@ Through a **Nir Eyal Hook Model** lens, Olive is a high-value **Facilitator**. T
 
 **3. Trust & clarity (Investment phase)**  
 - **Kroger Connect:** Use official Kroger/King Soopers branding where appropriate, but wrap it in Olive’s “safe space” copy, e.g. *“Olive never sees your password and never places an order without you.”*  
-- **Hand-off to Kroger:** When the user clicks “Open Kroger Cart,” use a short **“See you there!”** interstitial that reminds them their list is in the cart (and that coupons are clipped in Kroger if applicable), so the transition feels intentional, not abrupt.
+- **Hand-off to Kroger:** When the user clicks “Open Kroger Cart,” use a short **“See you there!”** interstitial that reminds them their list is in the cart (we show sale savings and fuel points; we don't clip digital coupons — they clip those on Kroger), so the transition feels intentional, not abrupt.
 
 **4. Visual direction: “Kitchen Table” aesthetic**  
 - Avoid “FinTech” or “SaaS” coldness. Olive should feel like a **kitchen companion**.  
@@ -184,7 +184,7 @@ Through a **Nir Eyal Hook Model** lens, Olive is a high-value **Facilitator**. T
 **Goals:**  
 - Confirm that items are in their cart (reduce anxiety).  
 - Remind them what to do next (open Kroger to review/checkout).  
-- Optionally mention coupons or store so the hand-off feels seamless.  
+- Optionally mention sale savings, fuel points, or store so the hand-off feels seamless.  
 - Keep tone warm and companion-like, not transactional.
 
 **Recommended copy (pick one or blend):**
@@ -194,7 +194,7 @@ Through a **Nir Eyal Hook Model** lens, Olive is a high-value **Facilitator**. T
 | **A. Mission complete** | All set — your cart’s ready. | We tucked everything into your [Store Name] cart. Open Kroger to review and checkout. [Open my cart] |
 | **B. See you there** | See you there! | Your list is in your King Soopers cart. Head over to add anything else or checkout. [Open my cart] |
 | **C. Companion** | Olive’s done her part. | Your items are waiting in your cart at [Store Name]. Tap below when you’re ready. [Open my cart] |
-| **D. Coupon-aware** | Cart’s ready — with your deals. | We added your items (and clipped coupons where we could). Open Kroger to checkout. [Open my cart] |
+| **D. Savings-aware** | Cart’s ready — with your deals. | We added your items and saved you $X from sale prices (we don't clip coupons; we show sale savings and fuel points). Open Kroger to checkout. [Open my cart] |
 
 **Notes for design:**  
 - **Headline:** Short, positive, “you’re done” feeling.  

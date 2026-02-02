@@ -235,7 +235,7 @@ function DashboardContent() {
     const storeLabel = storeLocationName ? ` at ${storeLocationName}` : ''
     const steps = [
       'Searching for the best price on your items…',
-      'Found some matches. Clipping coupons where we can…',
+      'Found some matches. Checking sale prices…',
       `Tucking items into your cart${storeLabel}…`,
     ]
     setAddToCartMessage(steps[0])
@@ -1351,7 +1351,7 @@ function DashboardContent() {
         )}
 
         {feedbackPromptVisible && (
-          <div className="bg-[#fffdd0] border border-[#efe9bf] rounded-3xl p-4 mb-6 shadow-sm">
+          <div className="bg-[#fffdd0] dark:bg-[var(--input)] border border-[#efe9bf] dark:border-[var(--border)] rounded-3xl p-4 mb-6 shadow-sm">
             <p className="text-[var(--cast-iron)] text-sm font-medium mb-2">
               Olive: “I tucked {feedbackItemCount ? `${feedbackItemCount} items` : 'your items'} into your cart yesterday. Did I find the right brands for you?”
             </p>
@@ -1387,7 +1387,7 @@ function DashboardContent() {
           <h3 className="text-[var(--cast-iron)] font-medium mb-3 text-sm">How should Olive pick items?</h3>
           <ModeToggle value={shoppingMode} onChange={setMode} disabled={modeLoading} />
           <p className="text-[var(--muted)] text-xs mt-3">
-            Olive picks sale items first, then best price per unit. Kroger&apos;s API doesn&apos;t expose digital coupon data, so we can&apos;t show coupon-adjusted cost — clip coupons on King Soopers / Kroger before checkout for extra savings.
+            Olive picks sale items first, then best price per unit. We show what you saved from sale prices (and can surface fuel points); we don&apos;t clip digital coupons — clip those on King Soopers / Kroger before checkout for extra savings.
           </p>
         </div>
 
@@ -1577,20 +1577,20 @@ function DashboardContent() {
             placeholder="What's on the menu? Paste a list, a recipe, or just type..."
           />
           {!zenMode && (
-            <div className="mt-3 bg-[var(--input)] border border-[#e5ecd7] rounded-2xl p-3">
-              <div className="text-xs text-[var(--olive-600)] font-medium mb-2">Quick actions</div>
+            <div className="mt-3 bg-[var(--input)] border border-[var(--border)] rounded-2xl p-3">
+              <div className="text-xs text-[var(--olive-600)] dark:text-[var(--sage-advice)] font-medium mb-2">Quick actions</div>
               <div className="flex flex-col sm:flex-row gap-2">
                 <button
                   type="button"
                   onClick={openBlobModal}
-                  className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[#e1e9d2] text-[#4d5f33] text-sm font-medium hover:bg-[var(--olive-100)]"
+                  className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--cast-iron)] text-sm font-medium hover:bg-[var(--olive-100)]"
                 >
                   📋 Smart Paste (paste a whole list)
                 </button>
                 <button
                   type="button"
                   onClick={openRecipeModal}
-                  className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[#e1e9d2] text-[#4d5f33] text-sm font-medium hover:bg-[var(--olive-100)]"
+                  className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--cast-iron)] text-sm font-medium hover:bg-[var(--olive-100)]"
                 >
                   🍳 Shop for a recipe (e.g. enchiladas for 4)
                 </button>
@@ -1941,7 +1941,7 @@ function DashboardContent() {
               ))}
             </div>
             <p className="text-[var(--muted)] text-xs mt-3">
-              Olive picks sale items first, then best price per unit. Kroger&apos;s API doesn&apos;t expose digital coupon data, so we can&apos;t show coupon-adjusted cost — clip coupons on King Soopers / Kroger before checkout for extra savings.
+              Olive picks sale items first, then best price per unit. We show what you saved from sale prices (and can surface fuel points); we don&apos;t clip digital coupons — clip those on King Soopers / Kroger before checkout for extra savings.
             </p>
           </div>
         )}
@@ -1957,7 +1957,7 @@ function DashboardContent() {
             <button
               type="button"
               onClick={() => setZenMode((prev) => !prev)}
-              className={`px-3 py-2 rounded-xl text-sm font-medium border ${zenMode ? 'bg-[var(--input)] border-[#9caf88] text-[var(--cast-iron)]' : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)]'}`}
+              className={`px-3 py-2 rounded-xl text-sm font-medium border ${zenMode ? 'bg-[var(--input)] border-[var(--sage-advice)] text-[var(--cast-iron)]' : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)]'}`}
             >
               {zenMode ? 'On' : 'Off'}
             </button>

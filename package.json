@@ -14,7 +14,12 @@
     "test:e2e:dashboard-authed": "playwright test e2e/dashboard.spec.ts --project=chromium-authed",
     "test:e2e:ui": "playwright test --ui",
     "create-test-user": "node scripts/create-test-user.js",
-    "vercel:set-supabase-key": "bash scripts/set-vercel-supabase-env.sh"
+    "vercel:set-supabase-key": "bash scripts/set-vercel-supabase-env.sh",
+    "test:locations": "node scripts/test-locations-multi-state.js",
+    "test:locations:prod": "BASE_URL=https://shopolive.xyz node scripts/test-locations-multi-state.js",
+    "test:e2e:prod:auth-setup": "PLAYWRIGHT_TEST_BASE_URL=https://shopolive.xyz npx playwright test --project=setup --headed",
+    "test:e2e:prod:branded": "PLAYWRIGHT_TEST_BASE_URL=https://shopolive.xyz npx playwright test e2e/dashboard.spec.ts -g \"open cart opens correct brand\" --project=chromium-authed",
+    "test:e2e:prod:branded:full": "npm run test:e2e:prod:auth-setup && npm run test:e2e:prod:branded"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",

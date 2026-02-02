@@ -10,7 +10,7 @@ const baseButtonClass =
 export default function ModeToggle({ value, onChange, disabled }: ModeToggleProps) {
   return (
     <div
-      className="bg-[var(--input)] dark:bg-[var(--surface-elevated)] p-1.5 rounded-2xl border-2 border-[var(--border)] dark:border-[var(--surface-elevated-3)] flex relative overflow-hidden"
+      className="bg-[var(--input)] dark:bg-[var(--surface-elevated)] p-1.5 rounded-2xl border-2 border-[var(--border)] dark:border-[var(--surface-elevated-2)] flex relative overflow-hidden"
       role="group"
       aria-label="Shopping mode"
     >
@@ -22,8 +22,8 @@ export default function ModeToggle({ value, onChange, disabled }: ModeToggleProp
         aria-label="Budget mode"
         className={`${baseButtonClass} ${
           value === 'budget'
-            ? 'bg-[var(--sage-advice)] text-[#fffdf0] shadow-md border border-transparent hover:opacity-90'
-            : 'bg-transparent dark:bg-[var(--surface-elevated)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
+            ? 'bg-[var(--sage-advice)] text-[var(--parchment)] shadow-md border border-transparent hover:opacity-90'
+            : 'bg-transparent dark:bg-[var(--surface-elevated-2)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
         }`}
       >
         <span aria-hidden>🏷️</span>
@@ -37,8 +37,8 @@ export default function ModeToggle({ value, onChange, disabled }: ModeToggleProp
         aria-label="Splurge mode"
         className={`${baseButtonClass} ${
           value === 'splurge'
-            ? 'bg-[var(--sage-advice)] text-[#fffdf0] shadow-md border border-transparent hover:opacity-90'
-            : 'bg-transparent dark:bg-[var(--surface-elevated)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
+            ? 'bg-[var(--sage-advice)] text-[var(--parchment)] shadow-md border border-transparent hover:opacity-90'
+            : 'bg-transparent dark:bg-[var(--surface-elevated-2)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
         }`}
       >
         <span aria-hidden>⭐</span>

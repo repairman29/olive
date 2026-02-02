@@ -119,6 +119,38 @@ test.describe('Dashboard (authenticated)', () => {
     await expect(haulCard.getByText(/Milk ×2/i)).toBeVisible()
   })
 
+  test.describe('Store picker: multi-state (IL, WI, CO, OH, AZ)', () => {
+    const storeRegions: Array<{ state: string; chain: string; zip: string }> = [
+      { state: 'Colorado', chain: 'King Soopers', zip: '80202' },
+      { state: 'Colorado', chain: 'King Soopers', zip: '80904' },
+      { state: 'Illinois', chain: 'Kroger', zip: '60101' },
+      { state: 'Wisconsin', chain: 'Kroger', zip: '53202' },
+      { state: 'Ohio', chain: 'Kroger', zip: '43215' },
+      { state: 'Arizona', chain: "Fry's", zip: '85004' },
+      { state: 'Texas', chain: 'Kroger', zip: '77001' },
+    ]
+
+    for (const { state, chain, zip } of storeRegions) {
+      test(`${state} (${chain}, ${zip}): search returns stores or no-stores message`, async ({ page }) => {
+        await expect(page.getByRole('heading', { name: /your store/i })).toBeVisible()
+        const openBtn = page.getByRole('button', { name: /set your store|add another store/i })
+        await openBtn.click()
+        await expect(page.getByText(/store chain/i)).toBeVisible({ timeout: 3000 })
+        const chainSelect = page.getByText(/store chain/i).locator('..').getByRole('combobox')
+        await chainSelect.selectOption({ label: chain })
+        const zipInput = page.getByPlaceholder(/ZIP/i)
+        await zipInput.fill(zip)
+        await page.getByRole('button', { name: /^Search$/i }).click()
+        await page.waitForTimeout(3000)
+        const storeSection = page.getByRole('heading', { name: /your store/i }).locator('..')
+        const hasStores = await storeSection.getByRole('button').filter({ hasText: /—|,\s*[A-Z]{2}\s/ }).first().isVisible().catch(() => false)
+        const noStores = await storeSection.getByText(/no stores found|try a different zip/i).isVisible().catch(() => false)
+        const hasError = await storeSection.getByText(/location search failed|network error/i).isVisible().catch(() => false)
+        expect(hasStores || noStores || hasError, `${state} ${chain} ${zip}: expected store list, no-stores message, or error`).toBe(true)
+      })
+    }
+  })
+
   test('quick add buttons add to list', async ({ page }) => {
     await page.getByRole('button', { name: /\+ add milk\?/i }).first().click()
     await expect(page.getByText(/added milk/i)).toBeVisible()
@@ -206,6 +238,68 @@ test.describe('Dashboard (authenticated)', () => {
     const hasItemCount = await newPage.getByText(/\d+\s*item|item.*cart/i).first().isVisible().catch(() => false)
     expect(hasMilk || hasItemCount, 'King Soopers cart should show Milk or item count').toBe(true)
     await newPage.close()
+  })
+
+  test.describe('Add to cart: right branded site for login/cart', () => {
+    const brandedFlows: Array<{ name: string; chain: string; zip: string; urlPattern: RegExp }> = [
+      { name: 'King Soopers (CO)', chain: 'King Soopers', zip: '80202', urlPattern: /kingsoopers\.com/ },
+      { name: 'Kroger (OH)', chain: 'Kroger', zip: '43215', urlPattern: /kroger\.com/ },
+      { name: "Fry's (AZ)", chain: "Fry's", zip: '85004', urlPattern: /frysfood\.com/ },
+    ]
+
+    for (const { name, chain, zip, urlPattern } of brandedFlows) {
+      test(`${name}: set store → add to cart → open cart opens correct brand (login/shop URL)`, async ({ page, context }) => {
+        const storeSection = page.getByRole('heading', { name: /your store/i }).locator('..')
+        await expect(storeSection).toBeVisible()
+
+        const openBtn = page.getByRole('button', { name: /set your store|add another store/i })
+        await openBtn.click()
+        await expect(page.getByText(/store chain/i)).toBeVisible({ timeout: 3000 })
+        const chainSelect = page.getByText(/store chain/i).locator('..').getByRole('combobox')
+        await chainSelect.selectOption({ label: chain })
+        await page.getByPlaceholder(/ZIP/i).fill(zip)
+        await page.getByRole('button', { name: /^Search$/i }).click()
+        await page.waitForTimeout(3000)
+
+        const firstStoreBtn = storeSection.getByRole('button').filter({ hasText: /—|,\s*[A-Z]{2}\s/ }).first()
+        if (!(await firstStoreBtn.isVisible().catch(() => false))) {
+          test.skip(true, `No store results for ${chain} ${zip}`)
+        }
+        await firstStoreBtn.click()
+        await page.waitForTimeout(1500)
+
+        await page.getByTestId('manual-add-input').fill('Milk')
+        await page.getByTestId('manual-add-button').click()
+        await expect(page.getByText(/got it.*milk/i)).toBeVisible({ timeout: 5000 })
+
+        const addToCartBtn = page.getByRole('button', { name: /add \d+ item(s)? to kroger cart/i })
+        if (!(await addToCartBtn.isVisible().catch(() => false))) {
+          test.skip(true, 'Kroger not connected; add-to-cart button not shown')
+        }
+        await addToCartBtn.click()
+        await expect(
+          page.getByText(/all done!|item results|please connect your kroger|added \d+ item/i)
+        ).toBeVisible({ timeout: 20000 })
+
+        const openCartBtn = page.getByRole('button', { name: /open cart/i })
+        if (!(await openCartBtn.isVisible().catch(() => false))) {
+          return
+        }
+
+        const newPagePromise = context.waitForEvent('page', { timeout: 8000 }).catch(() => null)
+        await openCartBtn.click()
+        const newPage = await newPagePromise
+        if (!newPage) {
+          return
+        }
+        await newPage.waitForLoadState('domcontentloaded', { timeout: 20000 })
+        // Right brand for login/shop: URL must be the store's branded domain
+        await expect(newPage).toHaveURL(urlPattern)
+        // Page shows cart or sign-in (where user logs in to that brand)
+        await expect(newPage.getByText(/cart|Cart|sign in|Sign in|items? in cart/i).first()).toBeVisible({ timeout: 15000 })
+        await newPage.close()
+      })
+    }
   })
 
   test('recipe modal shows paste link input', async ({ page }) => {

@@ -1,6 +1,6 @@
 # Olive (CartPilot)
 
-Your kitchen companion — taking the chore out of the grocery store. Add items to your Kroger cart from a simple list; Budget vs Splurge mode; memory for your usuals.
+Your kitchen companion — taking the chore out of the grocery store. Add items to your Kroger cart from a simple list; Budget vs Splurge mode; memory for your usuals. Olive shows sale savings and fuel points (we don't clip coupons).
 
 **Live:** [shopolive.xyz](https://shopolive.xyz)
 

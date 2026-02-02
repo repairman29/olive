@@ -24,7 +24,7 @@ Most of us already know *what* we need. The friction is: typing it into yet anot
    - Or **Shop for a recipe** — pick a saved recipe, search the web, or **paste a recipe link** (AllRecipes, Food Network, etc.) and Olive pulls the ingredients.  
    - Use **Quick add** for things you add often.
 5. **Choose Budget or Splurge** — Budget = sale items and best price per unit; Splurge = preferred brands when we know them.
-6. **Add to Kroger Cart** — Olive searches your store and adds matches. Then **Open my cart** to review and checkout in Kroger.
+6. **Add to Kroger Cart** — Olive searches your store and adds matches. Then **Open my cart** to review and checkout in Kroger. Olive shows what you saved from sale prices and can surface fuel points (we don't clip digital coupons — clip those on Kroger for extra savings).
 
 That’s the loop: **list → Add to Kroger Cart → open cart in Kroger.** The more you use it, the more Olive learns your usuals and preferences.
 

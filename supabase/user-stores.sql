@@ -1,5 +1,5 @@
 -- Multiple saved stores per user; pick one as active for add-to-cart.
--- Run after memory.sql, settings.sql, store-preference.sql.
+-- Active store drives product search (and thus sale prices / savings we show). Run after memory.sql, settings.sql, store-preference.sql.
 
 create table if not exists public.olive_user_stores (
   id uuid primary key default gen_random_uuid(),

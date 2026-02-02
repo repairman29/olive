@@ -44,12 +44,13 @@
   --card-foreground: #e1e3da;
   --border: #2d3129;
   --input: #1f221a;
-  /* Lighter surfaces so Budget/Splurge and Exact/Grandma toggles stand out */
-  --surface-elevated: #3a3e36;
-  --surface-elevated-2: #454a40;
-  --surface-elevated-3: #4e5348;
-  --muted: #a4a999;
-  --muted-foreground: #a4a999;
+  /* Lighter surfaces so Budget/Splurge and Exact/Grandma toggles stand out; WCAG AA contrast */
+  --surface-elevated: #2d3129;
+  --surface-elevated-2: #3a3e36;
+  --surface-elevated-3: #454a40;
+  /* Secondary text: lighter than previous #a4a999 for 4.5:1+ on card/background (brand legibility) */
+  --muted: #b8bdb0;
+  --muted-foreground: #b8bdb0;
 
   --parchment: #12140e;
   --cast-iron: #e1e3da;

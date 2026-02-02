@@ -28,6 +28,10 @@ export default function HelpPage() {
         {
           q: "What is 'Budget vs. Splurge' mode?",
           a: "You’re the pilot of your pantry. Budget mode tells Olive to hunt for store brands and sale items to save you money. Splurge mode tells her to prioritize your favorite premium brands and the items you usually love."
+        },
+        {
+          q: "What savings does Olive show?",
+          a: "We show what you saved from sale prices and can surface fuel points. We don't clip digital coupons — clip those on Kroger for extra savings."
         }
       ]
     },

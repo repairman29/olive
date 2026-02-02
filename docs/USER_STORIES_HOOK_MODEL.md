@@ -49,8 +49,8 @@ This is the **Landing Page’s** primary job: one clear value prop, one clear ne
 
 | # | Story | As a… | I want to… | So that… |
 |---|--------|--------|-------------|----------|
-| 10 | **The Progress Narrative** | user waiting for a batch-add | see a narrative status (e.g. "Clipping coupons…") | I feel the value of the work Olive is doing for me. |
-| 11 | **The Coupon Win** | value-seeker | see a "Total Savings" badge after my cart is filled | I get a dopamine hit from the deals Olive found. |
+| 10 | **The Progress Narrative** | user waiting for a batch-add | see a narrative status (e.g. "Checking sale prices…") | I feel the value of the work Olive is doing for me. |
+| 11 | **The Savings Win** | value-seeker | see savings from sale items (and fuel points when we can) after my cart is filled | I get a dopamine hit from what Olive saved me — we don't clip coupons; we show sale savings and loyalty/fuel points. |
 | 12 | **The "Found It" Feedback** | user | see clear green "In Cart" checkmarks next to my list items | I have visual confirmation that my mission is successful. |
 | 13 | **The Substitution Suggestion** | shopper | have Olive suggest a similar item if my usual is out of stock | I don’t have to go back and search manually. |
 
@@ -102,7 +102,7 @@ Use this to focus **design and engineering budget** on the stories that drive th
 | 8 | Recipe Customization | ❌ V2.0 | Uncheck ingredients before adding = next wave. |
 | 9 | Store Context | ✅ Built | Set store via ZIP. |
 | 10 | Progress Narrative | 📐 Designed | In design brief; implement batch-add narrative UI. |
-| 11 | Coupon Win | ❌ V2.0 | Total Savings badge = next wave. |
+| 11 | Savings Win | ✅ Built | Sale-item savings + fuel points; we don't clip coupons. |
 | 12 | "Found It" Feedback | ⚠️ Polish | Green "In Cart" checkmarks / per-item success state. |
 | 13 | Substitution Suggestion | ❌ V2.0 | Out-of-stock suggestion = next wave. |
 | 14 | Preference Memory | ✅ Built | Usuals + prefs from add-to-cart. |
@@ -130,7 +130,7 @@ Use this to focus **design and engineering budget** on the stories that drive th
 |-------|--------|------------|-----------|
 | 3 (predictive) | Suggested for you | Trigger | Predictive chips = stronger internal trigger. |
 | 8 | Recipe Customization | Action | Uncheck ingredients = less friction, less clutter. |
-| 11 | Coupon Win | Variable Reward | Total Savings = clear dopamine moment. |
+| 11 | Savings Win | Variable Reward | Sale savings + fuel points = clear dopamine moment (we don't clip coupons). |
 | 13 | Substitution Suggestion | Variable Reward | "Olive found an alternative" = trust + reward. |
 | 15 | Saved Recipe Box | Investment | Saved recipes = data in the app, reason to return. |
 | 20 | Multi-Cart Support | Hand-off | Ralphs / Fred Meyer = correct hand-off for more users. |
@@ -142,7 +142,7 @@ Use this to focus **design and engineering budget** on the stories that drive th
 - **Story 0** — Landing: "What is Olive in 5 seconds?"  
 - **Stories 1–20** — Mapped to Trigger (1–4), Action (5–9), Variable Reward (10–13), Investment (14–17), Hand-off (18–20).  
 - **V1.0** — Ship core hook: landing clarity, list/recipe/store/mode, batch add + progress narrative, "In Cart" feedback, success screen, transparency interstitial, feedback loop.  
-- **V2.0** — Add predictive suggestions, recipe uncheck, Total Savings, substitutions, saved recipes, multi-cart.
+- **V2.0** — Add predictive suggestions, recipe uncheck, substitutions, saved recipes, multi-cart (sale savings + fuel points already in V1).
 
 Use this doc alongside the [Design Brief](OLIVE_DESIGN_BRIEF.md) and [MVP Status](MVP-STATUS.md) to align product, design, and engineering on what to build first and why.
 
@@ -177,7 +177,7 @@ These additional stories focus on **edge cases, advanced planning, and long‑te
 | # | Story | As a… | I want to… | So that… |
 |---|--------|--------|-------------|----------|
 | 31 | **Zen Mode** | focused person | disable suggestions and predictive prompts | Olive only acts when I ask. |
-| 32 | **Expiring Coupon Alert** | deal hunter | get a gentle nudge about expiring coupons | I don’t lose the reward. |
+| 32 | **Fuel Points / Savings Nudge** | deal hunter | get a gentle nudge about expiring fuel points or sale timing | I don’t lose the reward. |
 | 33 | **Privacy Wipe** | privacy‑conscious user | delete purchase history without disconnecting Kroger | I control my data. |
 | 34 | **Offline List** | shopper with bad cell service | see my list offline | the app still works in‑store. |
 

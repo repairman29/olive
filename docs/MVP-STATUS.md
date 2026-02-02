@@ -12,6 +12,7 @@
 | **Auth** | Email sign up & sign in (Supabase project rbfzlqmkwhbvrrfdcain), redirect URLs doc’d |
 | **Kroger** | Connect Kroger (OAuth via Railway), add-to-cart, status check; tokens stored per user |
 | **Dashboard** | Olive message, Budget vs Splurge, Connect Kroger card, list input, Current Haul, Add to Kroger Cart, item results, Quick add (usuals + defaults), Sign out |
+| **Savings** | Sale-item savings and fuel points shown after add-to-cart; we don't clip coupons (users clip those on Kroger). |
 | **Memory** | olive_events, olive_preferences, olive_user_settings; usuals API; settings API; add-to-cart writes events + prefs; splurge = preferred UPC, budget = best price |
 | **Continue with Kroger** | Login?then=connect → dashboard?connectKroger=1; landing CTA |
 | **PWA** | manifest, placeholder icons, theme color |
