@@ -113,6 +113,7 @@ After the first checkout, show the **Smart Shopper Stats**:
 ### Deploy
 - **Olive (Next.js):** Vercel project **cartpilot**; production domain **shopolive.xyz**. Deploy from repo or `npx vercel --prod` from this repo.
 - **Kroger OAuth:** Railway; env: `KROGER_CLIENT_ID`, `KROGER_CLIENT_SECRET`, `SUPABASE_*`, `KROGER_SERVICE_SECRET`, `SERVICE_URL`.
+- **For AI agents / bots:** See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for commit/push/deploy steps, what to avoid committing, and post-deploy checks.
 
 ---
 
