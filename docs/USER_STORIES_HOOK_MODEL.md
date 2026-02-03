@@ -103,11 +103,11 @@ Use this to focus **design and engineering budget** on the stories that drive th
 | 9 | Store Context | ✅ Built | Set store via ZIP. |
 | 10 | Progress Narrative | 📐 Designed | In design brief; implement batch-add narrative UI. |
 | 11 | Savings Win | ✅ Built | Sale-item savings + fuel points; we don't clip coupons. |
-| 12 | "Found It" Feedback | ⚠️ Polish | Green "In Cart" checkmarks / per-item success state. |
+| 12 | "Found It" Feedback | ✅ Built | Green "In Cart" checkmarks / per-item success state (HaulItemCard basil border + status). |
 | 13 | Substitution Suggestion | ❌ V2.0 | Out-of-stock suggestion = next wave. |
 | 14 | Preference Memory | ✅ Built | Usuals + prefs from add-to-cart. |
 | 15 | Saved Recipe Box | ❌ V2.0 | Save pasted recipe to "Your recipes" = next wave. |
-| 16 | Feedback Loop | 📐 Designed | In design brief (24h post–Open Cart, Nailed it / Not quite). Implement banner + responses. |
+| 16 | Feedback Loop | ✅ Built | Banner + Nailed it / Not quite + Basil response; POST /api/memory/feedback stores haul_feedback in olive_events. |
 | 17 | Account Sync | ✅ Built | Kroger OAuth. |
 | 18 | Mission Complete | ✅ Built | Open Kroger Cart button + success screen (copy in brief). |
 | 19 | Transparency Interstitial | 📐 Designed | "Olive never places the order" in brief; implement pre–hand-off interstitial. |
@@ -115,10 +115,10 @@ Use this to focus **design and engineering budget** on the stories that drive th
 
 **V1.0 design/implementation focus:**  
 - **Story 0** — Landing clarity (copy + layout).  
-- **Story 10** — Batch-add progress narrative (design + build).  
-- **Story 12** — "In Cart" checkmarks / success state (design + build).  
-- **Story 16** — Feedback loop (banner + Nailed it / Not quite + Basil response).  
-- **Story 19** — Transparency interstitial before "Open Kroger Cart."
+- **Story 10** — Batch-add progress narrative (design + build). ✅ Shipped.  
+- **Story 12** — "In Cart" checkmarks / success state. ✅ Shipped.  
+- **Story 16** — Feedback loop (banner + Nailed it / Not quite + Basil response). ✅ Shipped.  
+- **Story 19** — Transparency interstitial before "Open Kroger Cart." ✅ Shipped.
 
 ---
 

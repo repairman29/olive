@@ -1,4 +1,4 @@
-# 🫒 Olive: Product Master Manual & North Star
+# Olive: Product Master Manual & North Star
 
 **"Your kitchen companion — turn a simple list into a Kroger cart, with recipes and your store in mind."**
 
@@ -10,9 +10,8 @@
 
 1. **E2E green** — Run `npm run test:e2e:dashboard-authed` (or with `TEST_USER_*`) and fix any flaky/skipped recipe or Smart Paste tests.
 2. **Recipe → haul** — E2E already covers “add ingredients from recipe → haul has items”; keep it green and add more specific ingredient assertions if desired.
-3. **Onboarding** — First-run guide, Connect Kroger timing, First Haul celebration copy; align with §5 and §6.
-4. **Add-to-cart reliability** — If 503s or “couldn’t add” spike, use [docs/ADD-TO-CART-503-REVIEW.md](ADD-TO-CART-503-REVIEW.md) and env-check; tune error messaging.
-5. **Bento & progress** — Fuel points / sale-savings tiles, typewriter progress; ship or hide until ready. (No separate “granny narrative” — the logic is in code.)
+3. **Add-to-cart reliability** — If 503s or “couldn’t add” spike, use [docs/ADD-TO-CART-503-REVIEW.md](ADD-TO-CART-503-REVIEW.md) and env-check; tune error messaging.
+4. **Bento & progress** — Shipped: NarrativeProgress, savings in result card, Sale savings + Fuel points tiles on dashboard. — Fuel points / sale-savings tiles, typewriter progress; ship or hide until ready. (No separate “granny narrative” — the logic is in code.)
 
 ---
 

@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   title: "Olive — Your Kitchen Companion",
   description: "Taking the 'chore' out of the grocery store. Tell Olive what you need, and she'll handle your Kroger cart.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/olive-branch.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: "/icon-192.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

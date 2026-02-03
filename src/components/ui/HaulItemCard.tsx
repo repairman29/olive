@@ -30,17 +30,19 @@ export default function HaulItemCard({
 
   const statusClass =
     status === 'in_cart'
-      ? 'text-[#8fbc8f] dark:text-[#a3d9a3]'
+      ? 'text-[var(--basil)] font-medium'
       : status === 'not_found'
-        ? 'text-[#d24d33] dark:text-[#e67e66]'
+        ? 'text-[var(--heirloom-tomato)]'
         : status === 'cart_failed'
           ? 'text-[#c7762a] dark:text-[#e09b5a]'
           : status === 'searching'
             ? 'text-[var(--sage-advice)]'
-            : 'text-[#87a05a] dark:text-[#a4a999]'
+            : 'text-[var(--muted-foreground)]'
+
+  const isInCart = status === 'in_cart'
 
   return (
-    <li className="flex justify-between items-center bg-[var(--input)] px-4 py-2.5 rounded-xl group border border-transparent hover:border-[var(--border)] transition-colors">
+    <li className={`flex justify-between items-center px-4 py-2.5 rounded-xl group border transition-colors ${isInCart ? 'bg-[var(--olive-100)] dark:bg-[#1f221a] border-l-4 border-l-[var(--basil)]' : 'bg-[var(--input)] border border-transparent hover:border-[var(--border)]'}`}>
       <div className="flex items-center gap-2">
         <input type="checkbox" checked={checked} onChange={onToggle} className="accent-[var(--sage-advice)]" />
         <span className="text-[var(--cast-iron)]">{name}</span>

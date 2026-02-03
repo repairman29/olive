@@ -1,3 +1,5 @@
+import OliveIcon from './OliveIcon'
+
 type ModeToggleProps = {
   value: 'budget' | 'splurge'
   onChange: (value: 'budget' | 'splurge') => void
@@ -26,7 +28,7 @@ export default function ModeToggle({ value, onChange, disabled }: ModeToggleProp
             : 'bg-transparent dark:bg-[var(--surface-elevated-2)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
         }`}
       >
-        <span aria-hidden>🏷️</span>
+        <OliveIcon name="tag" size={20} variant={value === 'budget' ? 'solid' : 'outline'} />
         Budget
       </button>
       <button
@@ -41,7 +43,7 @@ export default function ModeToggle({ value, onChange, disabled }: ModeToggleProp
             : 'bg-transparent dark:bg-[var(--surface-elevated-2)] text-[var(--foreground)] hover:text-[var(--sage-advice)] dark:hover:bg-[var(--surface-elevated-3)]'
         }`}
       >
-        <span aria-hidden>⭐</span>
+        <OliveIcon name="star" size={20} variant={value === 'splurge' ? 'solid' : 'outline'} />
         Splurge
       </button>
     </div>

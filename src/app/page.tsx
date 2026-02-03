@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { BentoTile, CommandInput, SageAdviceButton, ThemeToggle } from '@/components/ui'
+import { BentoTile, CommandInput, OliveIcon, OliveLogo, SageAdviceButton, ThemeToggle } from '@/components/ui'
 
 export default function Home() {
   const [heroCommand, setHeroCommand] = useState('')
@@ -13,9 +13,7 @@ export default function Home() {
         {/* Nav */}
         <nav className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-10 sm:mb-16">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[var(--sage-advice)] rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">🫒</span>
-            </div>
+            <OliveLogo size="lg" />
             <span className="text-xl font-medium text-[var(--cast-iron)]">Olive</span>
           </div>
           <div className="flex items-center gap-4 text-sm">
@@ -64,7 +62,7 @@ export default function Home() {
                 href="/login?then=connect"
                 className="inline-flex items-center gap-2 text-[var(--sage-advice)] hover:text-[var(--sage-advice)] transition"
               >
-                <span>🛒</span>
+                <OliveIcon name="cart" size={20} />
                 <span>Continue with Kroger</span>
               </Link>
               <a
@@ -84,9 +82,7 @@ export default function Home() {
           <BentoTile className="rounded-[28px] sm:rounded-[32px]">
             <div className="bg-[var(--input)] rounded-3xl p-4 sm:p-5">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 bg-[var(--sage-advice)] rounded-full flex items-center justify-center olive-pulse">
-                  <span className="text-white">🫒</span>
-                </div>
+                <OliveLogo size="xl" pulse />
                 <div>
                   <p className="text-[var(--cast-iron)] font-medium">Olive</p>
                   <p className="text-[var(--muted)] text-xs">Kitchen companion</p>
@@ -106,17 +102,23 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5 text-center text-xs text-[var(--sage-advice)]">
               <div className="bg-[var(--input)] rounded-2xl py-3">
-                <div className="text-lg">🏷️</div>
+                <div className="flex justify-center mb-1">
+                  <OliveIcon name="tag" size={24} className="text-[var(--sage-advice)]" />
+                </div>
                 Sale savings
                 <div className="text-[11px] text-[var(--muted)] mt-1">We show what you saved</div>
               </div>
               <div className="bg-[var(--input)] rounded-2xl py-3">
-                <div className="text-lg">⛽</div>
+                <div className="flex justify-center mb-1">
+                  <OliveIcon name="fuel" size={24} className="text-[var(--sage-advice)]" />
+                </div>
                 Fuel points
                 <div className="text-[11px] text-[var(--muted)] mt-1">+30¢ on deck</div>
               </div>
               <div className="bg-[var(--input)] rounded-2xl py-3">
-                <div className="text-lg">🛒</div>
+                <div className="flex justify-center mb-1">
+                  <OliveIcon name="olive-basket" size={24} className="text-[var(--sage-advice)]" />
+                </div>
                 Ready cart
                 <div className="text-[11px] text-[var(--muted)] mt-1">Drafted for review</div>
               </div>
@@ -129,8 +131,8 @@ export default function Home() {
           {/* Main Card */}
           <BentoTile className="md:col-span-2">
             <div className="flex flex-col sm:flex-row items-start gap-4">
-              <div className="w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
-                💬
+              <div className="w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center flex-shrink-0">
+                <OliveIcon name="message-circle" size={24} />
               </div>
               <div>
                 <h3 className="text-xl font-medium text-[var(--cast-iron)] mb-2">Just tell her</h3>
@@ -144,8 +146,8 @@ export default function Home() {
 
           {/* Secondary Cards */}
           <BentoTile>
-            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-sm">
-              <span>🏷️</span>
+            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+              <OliveIcon name="tag" size={24} />
             </div>
             <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Sale savings & loyalty</h3>
             <p className="text-[var(--muted-foreground)] text-sm">
@@ -154,9 +156,11 @@ export default function Home() {
           </BentoTile>
 
           <BentoTile>
-            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-sm">
-              <span>⛽</span>
-              <span className="absolute -right-1 -bottom-1 text-sm">📈</span>
+            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+              <OliveIcon name="fuel" size={24} />
+              <span className="absolute -right-1 -bottom-1">
+                <OliveIcon name="trending-up" size={16} />
+              </span>
             </div>
             <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Fuel Points Tracked</h3>
             <p className="text-[var(--muted-foreground)] text-sm">
@@ -165,9 +169,11 @@ export default function Home() {
           </BentoTile>
 
           <BentoTile>
-            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-sm">
-              <span>🔔</span>
-              <span className="absolute -right-1 -bottom-1 text-sm">🕒</span>
+            <div className="relative w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+              <OliveIcon name="bell" size={24} />
+              <span className="absolute -right-1 -bottom-1">
+                <OliveIcon name="clock" size={16} />
+              </span>
             </div>
             <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Never Run Out</h3>
             <p className="text-[var(--muted-foreground)] text-sm">
@@ -178,11 +184,11 @@ export default function Home() {
           <BentoTile>
             <div className="w-12 h-12 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center mb-3 shadow-sm">
               <div className="flex items-center gap-1 text-sm">
-                <span className="text-base">🏷️</span>
+                <OliveIcon name="tag" size={20} />
                 <div className="relative w-6 h-2 bg-[var(--border)] rounded-full">
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--card)] border border-[var(--border)] rounded-full shadow-sm"></span>
                 </div>
-                <span className="text-base">⭐</span>
+                <OliveIcon name="star" size={20} />
               </div>
             </div>
             <h3 className="text-lg font-medium text-[var(--cast-iron)] mb-1">Budget vs. Splurge</h3>

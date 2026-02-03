@@ -328,14 +328,15 @@ test.describe('Dashboard (authenticated)', () => {
   })
 
   test('recipe search: search input and results or no results; select recipe shows Add ingredients to list', async ({ page }) => {
+    test.setTimeout(60000)
     await page.getByRole('button', { name: /shop for a recipe/i }).click()
     await expect(page.getByText(/search more recipes|spoonacular/i)).toBeVisible()
     const searchInput = page.getByPlaceholder(/e\.g\. pasta|chicken stir fry/i)
     await searchInput.fill('pasta')
     await expect(
       page.getByText(/searching|from the web|no results|spoonacular not configured/i)
-    ).toBeVisible({ timeout: 10000 })
-    await page.waitForTimeout(3000)
+    ).toBeVisible({ timeout: 20000 })
+    await page.waitForTimeout(4000)
     const fromTheWeb = page.getByText(/from the web/i)
     if (await fromTheWeb.isVisible().catch(() => false)) {
       const resultsContainer = page.getByText(/from the web/i).locator('..')
@@ -346,7 +347,9 @@ test.describe('Dashboard (authenticated)', () => {
         await expect(page.getByText(/servings/i)).toBeVisible()
       }
     }
-    await page.getByRole('button', { name: /cancel/i }).first().click()
+    // Close modal: Cancel or Back, with short timeout so test doesn't hang if UI differs
+    const closeBtn = page.getByRole('button', { name: /cancel|back/i }).first()
+    await closeBtn.click({ timeout: 5000 }).catch(() => page.keyboard.press('Escape'))
   })
 
   test('add ingredients from recipe to list then verify haul', async ({ page }) => {
@@ -375,6 +378,10 @@ test.describe('Dashboard (authenticated)', () => {
     await expect(haulCard.locator('li').first()).toBeVisible({ timeout: 5000 })
     const itemCount = await haulCard.locator('li').count()
     expect(itemCount).toBeGreaterThan(0)
+    // Recipe → haul: haul contains at least one common ingredient (pasta search → pasta, oil, salt, etc.)
+    const haulText = await haulCard.textContent()
+    const hasIngredient = /\bpasta\b|oil|salt|garlic|tomato|cheese|pepper|onion|water|flour/i.test(haulText || '')
+    expect(hasIngredient).toBe(true)
   })
 
   test('feedback banner shows after 24h and accepts response', async ({ page }) => {

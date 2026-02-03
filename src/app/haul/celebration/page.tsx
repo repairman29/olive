@@ -35,7 +35,7 @@ export default function FirstHaulCelebrationPage() {
             </p>
           ) : (
             <p className="text-[var(--muted-foreground)] text-sm">
-              Your savings will appear here after your first haul. Olive tracks sale prices and best-value picks so you see exactly how much you saved (plus fuel points when we can).
+              Your savings will appear here after your first haul. Olive tracks sale prices and best-value picks so you see exactly how much you saved (plus fuel points when we can). We don&apos;t clip coupons — we show sale savings and fuel points.
             </p>
           )}
         </div>

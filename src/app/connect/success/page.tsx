@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { SageAdviceButton, BentoTile } from '@/components/ui'
+import { OliveIcon, OliveLogo, SageAdviceButton, BentoTile } from '@/components/ui'
 
 function ConnectSuccessContent() {
   const searchParams = useSearchParams()
@@ -13,17 +13,15 @@ function ConnectSuccessContent() {
     <main className="min-h-screen bg-[var(--background)] px-6 py-12 text-[var(--cast-iron)]">
       <div className="max-w-md mx-auto text-center">
         <div className="mb-8 flex justify-center items-center gap-4">
-          <div className="w-16 h-16 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-3xl animate-bounce">
-            🫒
+          <div className="w-24 h-24 rounded-2xl flex items-center justify-center animate-bounce overflow-hidden shrink-0">
+            <OliveLogo size="4xl" />
           </div>
-          <div className="text-2xl text-[#87a05a] dark:text-[#a4a999]">🤝</div>
-          <div className="w-16 h-16 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center text-3xl">
-            🛒
+          <div className="w-12 h-12 flex items-center justify-center text-[var(--sage-advice)]">
+            <OliveIcon name="handshake" size={32} />
           </div>
-        </div>
-
-        <div className="w-12 h-12 rounded-full bg-[#8fbc8f] text-white flex items-center justify-center text-xl mx-auto mb-4">
-          ✓
+          <div className="w-16 h-16 bg-[var(--olive-100)] rounded-2xl flex items-center justify-center">
+            <OliveIcon name="cart" size={28} />
+          </div>
         </div>
 
         <h1 className="text-3xl font-serif mb-2">You&rsquo;re all set!</h1>

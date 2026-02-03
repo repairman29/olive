@@ -80,7 +80,9 @@ Tests: both options visible and switchable for Budget/Splurge and Exact/Grandma;
 
 ## Authenticated dashboard tests (add-to-cart, King Soopers cart)
 
-These tests need a signed-in user. You can use **saved login (Google)** or **email/password**.
+These tests need a signed-in user. **Auth/test user credentials are stored in `.env.test`** (copy from `.env.test.example`). The setup project uses them to sign in and write `.auth/user.json`; without that file, all `chromium-authed` tests fail with "Error reading storage state from .auth/user.json".
+
+You can use **saved login (Google)** or **email/password**.
 
 ### Option A — Test user (email/password; recommended for CI and branded tests)
 

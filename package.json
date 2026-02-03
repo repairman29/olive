@@ -19,11 +19,13 @@
     "test:locations:prod": "BASE_URL=https://shopolive.xyz node scripts/test-locations-multi-state.js",
     "test:e2e:prod:auth-setup": "PLAYWRIGHT_TEST_BASE_URL=https://shopolive.xyz npx playwright test --project=setup --headed",
     "test:e2e:prod:branded": "PLAYWRIGHT_TEST_BASE_URL=https://shopolive.xyz npx playwright test e2e/dashboard.spec.ts -g \"open cart opens correct brand\" --project=chromium-authed",
-    "test:e2e:prod:branded:full": "npm run test:e2e:prod:auth-setup && npm run test:e2e:prod:branded"
+    "test:e2e:prod:branded:full": "npm run test:e2e:prod:auth-setup && npm run test:e2e:prod:branded",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.93.3",
+    "lucide-react": "^0.563.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -37,7 +39,9 @@
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4",
+    "to-ico": "^1.1.5",
     "typescript": "5.9.3"
   }
 }

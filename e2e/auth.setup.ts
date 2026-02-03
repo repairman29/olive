@@ -1,13 +1,18 @@
 import { test as setup, expect } from '@playwright/test'
 import * as path from 'path'
 import * as fs from 'fs'
+import { config as loadEnv } from 'dotenv'
+
+// Workers may not inherit .env.test from the config process; load it here so credentials are available.
+loadEnv({ path: path.join(__dirname, '..', '.env.test') })
 
 /**
  * One-time setup: sign in and save session so e2e can run as you.
  *
- * With TEST_USER_EMAIL + TEST_USER_PASSWORD in .env.test (or env): fills form and
- * signs in automatically. Create the user first: npm run create-test-user
- * (needs SUPABASE_SERVICE_ROLE_KEY in .env.test or .env.local for prod Supabase).
+ * Auth/test user details are saved in .env.test (see .env.test.example). Playwright
+ * loads them in playwright.config.ts. With TEST_USER_EMAIL + TEST_USER_PASSWORD set:
+ * fills the login form and signs in automatically (no browser needed). Create the
+ * user first: npm run create-test-user (needs SUPABASE_SERVICE_ROLE_KEY in .env.test).
  *
  * Without env credentials: opens /login and waits 2 min for you to sign in with
  * Google (or email) in the browser.
@@ -32,7 +37,7 @@ setup('save logged-in state', async ({ page }) => {
 
   if (testEmail && testPassword) {
     await page.getByPlaceholder(/you@example|email/i).fill(testEmail)
-    await page.getByLabel(/password/i).fill(testPassword)
+    await page.locator('input[type="password"]').fill(testPassword)
     await page.getByRole('button', { name: 'Sign In', exact: true }).click()
     await expect(page).toHaveURL(/\/dashboard/, { timeout: 30_000 })
   } else {

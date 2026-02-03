@@ -10,6 +10,8 @@ import {
   ConfidenceBadge,
   HaulItemCard,
   ModeToggle,
+  OliveIcon,
+  OliveLogo,
   QuantityToggle,
   NarrativeProgress,
   PredictiveChip,
@@ -107,6 +109,7 @@ function DashboardContent() {
   const [saveListModalOpen, setSaveListModalOpen] = useState(false)
   const [saveListName, setSaveListName] = useState('')
   const [saveListSaving, setSaveListSaving] = useState(false)
+  const [lastHaulSavingsDisplay, setLastHaulSavingsDisplay] = useState<string | null>(null)
   const recipeSearchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -198,6 +201,8 @@ function DashboardContent() {
     if (storedDone === 'true') {
       setFirstRunDone(true)
     }
+    const saved = localStorage.getItem('olive_last_haul_savings')
+    if (saved) setLastHaulSavingsDisplay(saved)
   }, [])
 
   useEffect(() => {
@@ -1156,12 +1161,18 @@ function DashboardContent() {
         const failed = Array.isArray(data.results) ? data.results.filter((r: any) => r.found && r.addedToCart === false).length : 0
         const added = Array.isArray(data.results) ? data.results.filter((r: any) => r.addedToCart === true).length : 0
         if (data.totalSavings && Number(data.totalSavings) > 0) {
-          setOliveMessage(failed > 0 ? `Added ${added} item(s). I saved you $${data.totalSavings} today. ${failed} couldn't be added (e.g. out of stock). 🫒` : `All done! I saved you $${data.totalSavings} today. Your cart is ready. 🫒`)
+          setOliveMessage(failed > 0 ? `Added ${added} item(s). I saved you $${data.totalSavings} today. ${failed} couldn't be added (e.g. out of stock).` : `All done! I saved you $${data.totalSavings} today. Your cart is ready.`)
           localStorage.setItem('olive_last_haul_savings', String(data.totalSavings))
+          setLastHaulSavingsDisplay(String(data.totalSavings))
         } else {
-          setOliveMessage(failed > 0 ? `Added ${added} item(s). ${failed} couldn't be added (e.g. out of stock). Check your cart. 🫒` : "All done! Your cart is ready for checkout. 🫒")
-          if (data.totalSavings) localStorage.setItem('olive_last_haul_savings', String(data.totalSavings))
-          else localStorage.removeItem('olive_last_haul_savings')
+          setOliveMessage(failed > 0 ? `Added ${added} item(s). ${failed} couldn't be added (e.g. out of stock). Check your cart.` : "All done! Your cart is ready for checkout.")
+          if (data.totalSavings) {
+            localStorage.setItem('olive_last_haul_savings', String(data.totalSavings))
+            setLastHaulSavingsDisplay(String(data.totalSavings))
+          } else {
+            localStorage.removeItem('olive_last_haul_savings')
+            setLastHaulSavingsDisplay(null)
+          }
         }
         fetchUsuals(user.id)
         setFeedbackPromptVisible(false)
@@ -1206,21 +1217,24 @@ function DashboardContent() {
     setShowCartInterstitial(false)
   }
 
-  const respondToFeedback = (response: 'nailed' | 'not_quite') => {
+  const respondToFeedback = async (response: 'nailed' | 'not_quite') => {
     setFeedbackResponse(response)
     try {
       localStorage.setItem('olive_feedback_response', response)
+      await fetch('/api/memory/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ response }),
+      })
     } catch {
-      // no-op
+      // no-op; local state still updated
     }
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-        <div className="w-12 h-12 bg-[var(--sage)] rounded-full flex items-center justify-center olive-pulse">
-          <span className="text-white text-xl">🫒</span>
-        </div>
+        <OliveLogo size="3xl" pulse />
       </div>
     )
   }
@@ -1229,8 +1243,8 @@ function DashboardContent() {
     return (
       <main className="min-h-screen bg-[var(--background)] flex items-center justify-center px-6">
         <div className="max-w-md w-full bg-[var(--card)] rounded-3xl p-8 border border-[var(--border)] shadow-sm text-center">
-          <div className="w-14 h-14 bg-[var(--sage)] rounded-full flex items-center justify-center mx-auto mb-4 olive-pulse">
-            <span className="text-white text-2xl">🫒</span>
+          <div className="flex justify-center mb-4">
+            <OliveLogo size="3xl" pulse />
           </div>
           <h2 className="text-xl font-medium text-[var(--cast-iron)] mb-2">Olive isn&apos;t configured yet</h2>
           <p className="text-[var(--muted-foreground)] text-sm mb-5">
@@ -1269,9 +1283,7 @@ function DashboardContent() {
       <header className="bg-[var(--card)]/80 backdrop-blur-sm border-b border-[var(--border)] sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-3 flex justify-between items-center">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[var(--sage)] rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">🫒</span>
-            </div>
+            <OliveLogo size="lg" />
             <span className="text-lg font-medium text-[var(--sage-advice)]">Olive</span>
           </Link>
           <div className="flex items-center gap-4">
@@ -1293,8 +1305,8 @@ function DashboardContent() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Olive Pulse - The Conversation Center */}
         <div className="text-center mb-8 fade-in">
-          <div className="w-16 h-16 bg-[var(--sage)] rounded-full flex items-center justify-center mx-auto mb-4 olive-pulse">
-            <span className="text-white text-2xl">🫒</span>
+          <div className="flex justify-center mb-4">
+            <OliveLogo size="4xl" pulse />
           </div>
           <p className="text-[var(--cast-iron)] text-lg">{oliveMessage}</p>
         </div>
@@ -1585,14 +1597,14 @@ function DashboardContent() {
                   onClick={openBlobModal}
                   className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--cast-iron)] text-sm font-medium hover:bg-[var(--olive-100)]"
                 >
-                  📋 Smart Paste (paste a whole list)
+                  <OliveIcon name="clipboard-list" size={20} className="inline-block align-middle" /> Smart Paste (paste a whole list)
                 </button>
                 <button
                   type="button"
                   onClick={openRecipeModal}
                   className="flex-1 text-left px-3 py-2 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--cast-iron)] text-sm font-medium hover:bg-[var(--olive-100)]"
                 >
-                  🍳 Shop for a recipe (e.g. enchiladas for 4)
+                  <OliveIcon name="cooking-pot" size={20} className="inline-block align-middle" /> Shop for a recipe (e.g. enchiladas for 4)
                 </button>
               </div>
             </div>
@@ -1768,7 +1780,7 @@ function DashboardContent() {
           {/* Current Haul - Main Card */}
           <div data-testid="current-haul-card" className="col-span-1 sm:col-span-2 bg-[var(--card)] rounded-3xl p-5 border border-[var(--border)] shadow-sm">
             <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <span className="text-lg">🛒</span>
+              <OliveIcon name="olive-basket" size={24} />
               <h3 className="text-[var(--cast-iron)] font-medium">Current Haul</h3>
               {items.length > 0 && (
                 <div className="ml-auto flex items-center gap-3">
@@ -1821,19 +1833,33 @@ function DashboardContent() {
               </ul>
             ) : (
               <div className="space-y-3">
-                <p className="text-[var(--muted)] text-center py-4 text-sm font-medium">
+                <div className="flex justify-center pt-2">
+                  <OliveIcon name="olive-branch" size={32} className="text-[var(--olive-500)] dark:text-[var(--olive-400)]" />
+                </div>
+                <p className="text-[var(--muted)] text-center py-2 text-sm font-medium">
                   Your list is empty — add something above
                 </p>
-                <div className="grid grid-cols-1 gap-2 opacity-40">
-                  {['Milk', 'Eggs', 'Bread'].map((ghost) => (
-                    <div 
-                      key={ghost}
-                      className="flex justify-between items-center bg-[var(--input)] px-4 py-2.5 rounded-xl border border-dashed border-[var(--border)] cursor-pointer hover:opacity-100 transition-opacity"
-                      onClick={() => addQuickItem(ghost)}
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { label: 'Milk', icon: 'milk' as const },
+                    { label: 'Eggs', icon: 'egg' as const },
+                    { label: 'Bread', icon: 'wheat' as const },
+                    { label: 'Avocados', icon: 'olive-avocado' as const },
+                  ].map(({ label, icon }) => (
+                    <button
+                      key={label}
+                      type="button"
+                      className="flex items-center justify-between gap-3 w-full bg-[var(--input)] dark:bg-[var(--surface-elevated)] px-4 py-3 rounded-xl border border-dashed border-[var(--border)] cursor-pointer hover:bg-[var(--olive-100)] dark:hover:bg-[var(--olive-900)] hover:border-[var(--olive-300)] transition-all text-left group"
+                      onClick={() => addQuickItem(label)}
                     >
-                      <span className="text-[var(--cast-iron)] font-medium">{ghost}</span>
-                      <span className="text-xl text-[var(--muted)]">+</span>
-                    </div>
+                      <span className="flex items-center gap-3">
+                        <span className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--card)] dark:bg-[var(--surface-elevated-2)] text-[var(--olive-600)] dark:text-[var(--olive-400)] group-hover:text-[var(--sage-advice)] transition-colors">
+                          <OliveIcon name={icon} size={20} />
+                        </span>
+                        <span className="text-[var(--cast-iron)] font-medium">{label}</span>
+                      </span>
+                      <span className="text-[var(--muted)] group-hover:text-[var(--sage-advice)] transition-colors text-lg font-light">+</span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -1843,13 +1869,24 @@ function DashboardContent() {
           {/* Result Card */}
           {cartResult && (
             <div className={`rounded-3xl p-5 border ${cartResult.success ? 'bg-[var(--olive-100)] dark:bg-[#1f221a] border-[var(--border)]' : 'bg-[#fff7ed] dark:bg-[#2d1a0e] border-[var(--heirloom-tomato)] dark:border-[#3f2a1a]'}`}>
-              <div className="text-2xl mb-2">{cartResult.success ? '✓' : '⚠️'}</div>
+              <div className="mb-2">
+                <OliveIcon
+                  name={cartResult.success ? 'check-circle' : 'triangle-alert'}
+                  size={28}
+                  className={cartResult.success ? 'text-[var(--basil)]' : 'text-[var(--heirloom-tomato)]'}
+                />
+              </div>
               <h3 className="text-[var(--cast-iron)] font-medium text-sm">
                 {cartResult.success ? 'Added to Cart' : 'Needs attention'}
               </h3>
               {cartResult.success && cartResult.shopping_mode_used && (
                 <p className="text-[var(--muted)] text-xs mt-1">
                   {cartResult.shopping_mode_used === 'budget' ? 'Best deals' : 'Your preferences'}
+                </p>
+              )}
+              {cartResult.success && cartResult.totalSavings != null && Number(cartResult.totalSavings) > 0 && (
+                <p className="text-[var(--sage-advice)] text-xs mt-1 font-medium">
+                  You saved ${Number(cartResult.totalSavings).toFixed(2)} from sale prices.
                 </p>
               )}
               {cartResult.success ? (
@@ -1861,9 +1898,12 @@ function DashboardContent() {
                   Open Cart →
                 </button>
               ) : (
-                <p className="text-[var(--heirloom-tomato)] text-xs mt-2">
-                  {typeof cartResult.error === 'string' ? cartResult.error : 'Some items could not be added.'}
-                </p>
+                <div className="text-xs mt-2 space-y-1">
+                  <p className="text-[var(--heirloom-tomato)]">
+                    {typeof cartResult.error === 'string' ? cartResult.error : 'Some items could not be added.'}
+                  </p>
+                  <a href="/help" className="text-[var(--sage-advice)] hover:underline block">Tips and troubleshooting →</a>
+                </div>
               )}
             </div>
           )}
@@ -1884,6 +1924,20 @@ function DashboardContent() {
               </div>
             )
           )}
+
+          {/* Bento: Sale savings + Fuel points */}
+          <div className="grid grid-cols-2 gap-3 mt-3">
+            <div className="bg-[var(--card)] rounded-2xl p-4 border border-[var(--border)] shadow-sm">
+              <h4 className="text-xs font-semibold text-[var(--sage-advice)] uppercase tracking-wider mb-1">Sale savings</h4>
+              <p className="text-sm text-[var(--cast-iron)]">
+                {lastHaulSavingsDisplay ? `You saved $${lastHaulSavingsDisplay} on your last haul` : 'From sale prices when you add to cart'}
+              </p>
+            </div>
+            <div className="bg-[var(--card)] rounded-2xl p-4 border border-[var(--border)] shadow-sm">
+              <h4 className="text-xs font-semibold text-[var(--sage-advice)] uppercase tracking-wider mb-1">Fuel points</h4>
+              <p className="text-sm text-[var(--muted-foreground)]">Earn points when you shop — we&apos;ll show your progress here soon.</p>
+            </div>
+          </div>
         </div>
 
         {/* Add to Cart Button */}
@@ -2174,9 +2228,7 @@ export default function Dashboard() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-        <div className="w-12 h-12 bg-[var(--sage)] rounded-full flex items-center justify-center olive-pulse">
-          <span className="text-white text-xl">🫒</span>
-        </div>
+        <OliveLogo size="3xl" pulse />
       </div>
     }>
       <DashboardContent />

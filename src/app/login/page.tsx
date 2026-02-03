@@ -4,6 +4,7 @@ import { useState, Suspense, useEffect } from 'react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { OliveIcon, OliveLogo } from '@/components/ui'
 import { SignInWithGoogle } from './SignInWithGoogle'
 
 function LoginContent() {
@@ -68,9 +69,7 @@ function LoginContent() {
     <main className="min-h-screen bg-[var(--background)] flex items-center justify-center px-6">
       <div className="max-w-sm w-full">
         <Link href="/" className="flex items-center justify-center gap-2 mb-10">
-          <div className="w-10 h-10 bg-[var(--sage)] rounded-full flex items-center justify-center olive-pulse">
-            <span className="text-white text-lg">🫒</span>
-          </div>
+          <OliveLogo size="2xl" pulse />
           <span className="text-2xl font-medium text-[var(--sage-advice)]">Olive</span>
         </Link>
 
@@ -175,7 +174,7 @@ function LoginContent() {
               href="/login?then=connect"
               className="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--cast-iron)] text-sm"
             >
-              <span>🛒</span>
+              <OliveIcon name="cart" size={20} />
               <span>Continue with Kroger</span>
               <span className="text-[var(--muted)] text-xs">(sign in first)</span>
             </Link>
@@ -196,9 +195,7 @@ export default function Login() {
     <Suspense
       fallback={
         <main className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-          <div className="w-12 h-12 bg-[var(--sage)] rounded-full olive-pulse flex items-center justify-center">
-            <span className="text-white text-xl">🫒</span>
-          </div>
+          <OliveLogo size="3xl" pulse />
         </main>
       }
     >

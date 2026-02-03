@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { OliveLogo } from '@/components/ui'
 
 /**
  * Handles OAuth callback when tokens are in the URL hash (implicit flow).
@@ -68,9 +69,7 @@ function AuthCallbackContent() {
   return (
     <main className="min-h-screen bg-[#fdfcf9] flex items-center justify-center px-6">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 bg-[#9caf88] rounded-full olive-pulse flex items-center justify-center">
-          <span className="text-white text-xl">🫒</span>
-        </div>
+        <OliveLogo size="3xl" pulse />
         <p className="text-[#536538] text-sm">Signing you in...</p>
       </div>
     </main>
@@ -82,9 +81,7 @@ export default function AuthCallbackPage() {
     <Suspense
       fallback={
         <main className="min-h-screen bg-[#fdfcf9] flex items-center justify-center">
-          <div className="w-12 h-12 bg-[#9caf88] rounded-full olive-pulse flex items-center justify-center">
-            <span className="text-white text-xl">🫒</span>
-          </div>
+          <OliveLogo size="3xl" pulse />
         </main>
       }
     >

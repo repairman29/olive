@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import OliveIcon from './OliveIcon'
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
@@ -33,9 +34,9 @@ export default function ThemeToggle() {
       aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       {theme === 'light' ? (
-        <span className="text-xl" aria-hidden>🌙</span>
+        <OliveIcon name="moon" size={24} />
       ) : (
-        <span className="text-xl" aria-hidden>☀️</span>
+        <OliveIcon name="sun" size={24} />
       )}
     </button>
   )

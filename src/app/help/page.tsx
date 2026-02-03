@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { SageAdviceButton } from '@/components/ui'
+import { OliveIcon, OliveLogo, SageAdviceButton } from '@/components/ui'
 
 export default function HelpPage() {
   const faqs = [
@@ -40,7 +40,8 @@ export default function HelpPage() {
       questions: [
         {
           q: "Why couldn't Olive find an item?",
-          a: "Sometimes items are out of stock or described in a way that confuses Olive’s search. If she’s not 100% sure, she’ll flag it with an Heirloom Tomato icon so you can give it a quick look."
+          a: "Sometimes items are out of stock or described in a way that confuses Olive’s search. If she’s not 100% sure, she’ll flag it with an Heirloom Tomato icon so you can give it a quick look.",
+          icon: 'triangle-alert' as const
         }
       ]
     }
@@ -50,7 +51,9 @@ export default function HelpPage() {
     <main className="min-h-screen bg-[var(--background)] px-6 py-12 text-[var(--cast-iron)]">
       <div className="max-w-2xl mx-auto">
         <div className="mb-12 text-center">
-          <span className="text-4xl mb-4 block">🫒</span>
+          <div className="flex justify-center mb-4">
+            <OliveLogo size="5xl" />
+          </div>
           <h1 className="text-3xl font-serif mb-2">Olive’s Help Center</h1>
           <p className="text-[var(--muted-foreground)]">Your kitchen companion’s guide to a tidy pantry.</p>
         </div>
@@ -67,6 +70,11 @@ export default function HelpPage() {
                     <h3 className="text-lg font-serif mb-3 group-hover:text-[var(--sage-advice)] transition-colors">
                       {faq.q}
                     </h3>
+                    {'icon' in faq && faq.icon && (
+                      <div className="mb-2">
+                        <OliveIcon name={faq.icon} size={24} className="text-[var(--heirloom-tomato)]" ariaLabel="Low confidence or needs attention" />
+                      </div>
+                    )}
                     <p className="text-[var(--muted-foreground)] leading-relaxed mb-4 italic">
                       &ldquo;{faq.a}&rdquo;
                     </p>
