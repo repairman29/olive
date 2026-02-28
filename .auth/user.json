@@ -1,0 +1,34 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://shopolive.xyz",
+      "localStorage": [
+        {
+          "name": "olive_haul_items",
+          "value": "[]"
+        },
+        {
+          "name": "olive_blacklist_items",
+          "value": "[]"
+        },
+        {
+          "name": "olive_first_run_done",
+          "value": "false"
+        },
+        {
+          "name": "sb-rbfzlqmkwhbvrrfdcain-auth-token",
+          "value": "{\"access_token\":\"eyJhbGciOiJIUzI1NiIsImtpZCI6IjdxNS9TMHJXdE5UNHg2QUIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3JiZnpscW1rd2hidnJyZmRjYWluLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJmZDdkMjQxYi00NjYwLTQ1N2ItYTlhZC1mNDJhZjY5ZmJkNDciLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzcwMDk1MDQzLCJpYXQiOjE3NzAwOTE0NDMsImVtYWlsIjoiamVmZmFka2luczFAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsiaXNfYWRtaW4iOnRydWUsImlzX293bmVyIjp0cnVlLCJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl0sInJvbGUiOiJhZG1pbiJ9LCJ1c2VyX21ldGFkYXRhIjp7ImFkbWluX2xldmVsIjoic3VwZXJfYWRtaW4iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZ2l0aHViX3VzZXJuYW1lIjoicmVwYWlybWFuMjkiLCJpc19hZG1pbiI6dHJ1ZSwiaXNfb3duZXIiOnRydWUsInJvbGUiOiJhZG1pbiIsInN0cmlwZV9hY2NvdW50X2lkIjoiYWNjdF8xUkZmOWNRYnlnV2pBYXg1Iiwic3RyaXBlX2FjY291bnRfdmVyaWZpZWQiOnRydWUsInVzZXJfbmFtZSI6InJlcGFpcm1hbjI5IiwidXNlcm5hbWUiOiJyZXBhaXJtYW4yOSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzcwMDkxNDQyfV0sInNlc3Npb25faWQiOiJmMjI1OWI5YS0wNTQzLTQ1NDEtYTljOC0yMjc5ZTI5OTJkNWMiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.lAOa7tfmlAOcnGzO6w0d2oHtUnpsLIzH80RLfrjsWNA\",\"token_type\":\"bearer\",\"expires_in\":3600,\"expires_at\":1770095043,\"refresh_token\":\"3tef435xplgr\",\"user\":{\"id\":\"fd7d241b-4660-457b-a9ad-f42af69fbd47\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"jeffadkins1@gmail.com\",\"email_confirmed_at\":\"2026-01-08T01:23:59.203785Z\",\"phone\":\"\",\"confirmed_at\":\"2026-01-08T01:23:59.203785Z\",\"last_sign_in_at\":\"2026-02-03T04:04:02.992923507Z\",\"app_metadata\":{\"is_admin\":true,\"is_owner\":true,\"provider\":\"email\",\"providers\":[\"email\"],\"role\":\"admin\"},\"user_metadata\":{\"admin_level\":\"super_admin\",\"email_verified\":true,\"github_username\":\"repairman29\",\"is_admin\":true,\"is_owner\":true,\"role\":\"admin\",\"stripe_account_id\":\"acct_1RFf9cQbygWjAax5\",\"stripe_account_verified\":true,\"user_name\":\"repairman29\",\"username\":\"repairman29\"},\"identities\":[{\"identity_id\":\"c6df42a8-446b-4630-9b7d-835f587f37b9\",\"id\":\"fd7d241b-4660-457b-a9ad-f42af69fbd47\",\"user_id\":\"fd7d241b-4660-457b-a9ad-f42af69fbd47\",\"identity_data\":{\"email\":\"test-support-1767835438814@example.com\",\"email_verified\":false,\"phone_verified\":false,\"sub\":\"fd7d241b-4660-457b-a9ad-f42af69fbd47\"},\"provider\":\"email\",\"last_sign_in_at\":\"2026-01-08T01:23:59.201964Z\",\"created_at\":\"2026-01-08T01:23:59.202022Z\",\"updated_at\":\"2026-01-08T01:23:59.202022Z\",\"email\":\"test-support-1767835438814@example.com\"}],\"created_at\":\"2026-01-08T01:23:59.198823Z\",\"updated_at\":\"2026-02-03T04:04:02.997068Z\",\"is_anonymous\":false},\"weak_password\":null}"
+        },
+        {
+          "name": "olive_first_run_step",
+          "value": "0"
+        },
+        {
+          "name": "olive_zen_mode",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}
